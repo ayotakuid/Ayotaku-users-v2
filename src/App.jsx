@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 function App() {
   const [isTextDashboard, setIsTextDashboard] = useState(null);
