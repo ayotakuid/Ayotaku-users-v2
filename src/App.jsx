@@ -2,22 +2,40 @@ import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import { Button } from 'primereact/button';
+
+import Cookies from './utils/handler-cookies';
 
 function App() {
-  const [isTextDashboard, setIsTextDashboard] = useState(null);
-
   useEffect(() => {
-    setTimeout(() => {
-      setIsTextDashboard('Ini adalah text!')
-    }, 2000)
-  }, [setIsTextDashboard]);
+    const valueCOokies = JSON.stringify({
+      auth: false,
+      token: null
+    });
+
+    if (Cookies.checkingCookiesUser('ayotaku-login').isExist === false) {
+      Cookies.setCookiesUser('ayotaku-login', valueCOokies, 14)
+      return;
+    }
+  });
+
+  const handlerClickButton = () => {
+    const cookiesUser = Cookies.getCookiesUser('ayotaku-login');
+    return console.log(JSON.parse(cookiesUser));
+  }
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          
+          <Route 
+            path='/register'
+          />
+
+          <Route 
+            path='/'
+            element={<Button label='Cookies' onClick={handlerClickButton}/>}
+          />
         </Routes>
       </BrowserRouter>
     </>
