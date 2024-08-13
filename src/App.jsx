@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
-import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Navigate, Routes, useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { Button } from 'primereact/button';
 
 import Cookies from './utils/handler-cookies';
 import RegisterComponent from './auth/RegisterComponent';
+import HomeComponent from './component/HomeComponent';
 
 function App() {
+  // STATE MANAGEMENT
   const [isAuthUser, setIsAuthUser] = useState(false);
 
   // SET DEFAULT COOKIES FIRST TIME VISIT
@@ -32,11 +34,6 @@ function App() {
     }
   }, [])
 
-  const handlerClickButton = () => {
-    const cookiesUser = Cookies.getCookiesUser('ayotaku-login');
-    return console.log(JSON.parse(cookiesUser));
-  }
-
   return (
     <>
       <BrowserRouter>
@@ -48,15 +45,7 @@ function App() {
 
           <Route 
             path='/'
-            element={
-              <Button 
-                label='Cookies' 
-                size='small' 
-                icon='pi pi-check'
-                className='dark:text-white mx-3 my-5'
-                onClick={handlerClickButton}
-              />
-            }
+            element={<HomeComponent />}
           />
         </Routes>
       </BrowserRouter>
