@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+* {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 600;
+}
+
+body {
+  background-color: #2F303E;
+  color: #D9D2FF;
+}
+
+button {
+  color: #FFFFFF;
+}
+
+.p-divider .p-divider-content {
+  background-color: #46496A !important;
+}
+
+.p-divider::before {
+  border-color: #FFFFFF !important;
+  /* mengatur garis divider */
+}
