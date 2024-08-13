@@ -5,8 +5,12 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { Button } from 'primereact/button';
 
 import Cookies from './utils/handler-cookies';
+import RegisterComponent from './auth/RegisterComponent';
 
 function App() {
+  const [isAuthUser, setIsAuthUser] = useState(false);
+
+  // SET DEFAULT COOKIES FIRST TIME VISIT
   useEffect(() => {
     const valueCOokies = JSON.stringify({
       auth: false,
@@ -14,10 +18,19 @@ function App() {
     });
 
     if (Cookies.checkingCookiesUser('ayotaku-login').isExist === false) {
-      Cookies.setCookiesUser('ayotaku-login', valueCOokies, 14)
+      Cookies.setCookiesUser('ayotaku-login', valueCOokies, 30)
       return;
     }
-  });
+  }, []);
+
+  // CHECKING IF COOKIES ALREADY EXIST
+  useEffect(() => {
+    if (Cookies.getCookiesUser('ayotaku-login')) {
+      const parseCookies = JSON.parse(Cookies.getCookiesUser('ayotaku-login'));
+      const token = parseCookies.auth
+      return console.log(token);
+    }
+  }, [])
 
   const handlerClickButton = () => {
     const cookiesUser = Cookies.getCookiesUser('ayotaku-login');
@@ -30,11 +43,20 @@ function App() {
         <Routes>
           <Route 
             path='/register'
+            element={<RegisterComponent />}
           />
 
           <Route 
             path='/'
-            element={<Button label='Cookies' onClick={handlerClickButton}/>}
+            element={
+              <Button 
+                label='Cookies' 
+                size='small' 
+                icon='pi pi-check'
+                className='dark:text-white mx-3 my-5'
+                onClick={handlerClickButton}
+              />
+            }
           />
         </Routes>
       </BrowserRouter>
