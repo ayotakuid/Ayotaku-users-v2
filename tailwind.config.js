@@ -9,6 +9,7 @@ export default {
       extend: {
         backgroundColor: {
           "ayotaku-box": "#46496A",
+          "ayotaku-button": "#D9D2FF",
         },
         textColor: {
           "ayotaku-text-default": "#D9D2FF",

@@ -32,7 +32,7 @@ function RegisterComponent() {
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center dark:text-ayotaku-text-default">
-        <div className="md:max-w-5xl bg-ayotaku-box rounded-lg shadow-md p-3">
+        <div className="md:max-w-4xl max-h-fit bg-ayotaku-box rounded-lg shadow-md p-3">
           <div className="container mx-auto justify-center items-center my-10">
             <div className="grid items-center justify-center">
               {
@@ -45,21 +45,21 @@ function RegisterComponent() {
                 >
                   <Skeleton circle={true} width={64} height={64} />
                 </SkeletonTheme>
-                : <img src={IconCirleAyotaku} alt="Icon Circle Ayotaku" className="w-16" />
+                : <img src={IconCirleAyotaku} alt="Icon Circle Ayotaku" className="w-10" />
               }
             </div>
-            <h1 className="text-3xl grid items-center justify-center text-ayotaku-text-default mt-5">Sign Up</h1>
+            <h1 className="text-2xl grid items-center justify-center text-ayotaku-text-default mt-5">Sign Up</h1>
             <div className="grid items-center justify-center">
-              <span className="grid items-center justify-center text-sm text-teal-400 text-opacity-70 w-96 text-center mt-3">
-                Enter your email, username and password below to create account OR you can register Via Google.
+              <span className="grid items-center justify-center text-xs text-teal-400 text-opacity-70 w-96 text-center mt-3">
+                Enter your email, username and password below to create account or you can register via Google.
                 </span>
             </div>
           </div>
 
           <div className="container mx-auto p-4 rounded-lg">
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
-              <div className="p-4 flex bg-ayotaku-box rounded-lg justify-center items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-1 justify-center items-center">
+              <div className="p-4 flex col-span-12 sm:col-span-5 bg-ayotaku-box rounded-lg justify-center items-center">
                 {
                   (!isLoadingPage) 
                   ?
@@ -82,28 +82,28 @@ function RegisterComponent() {
                   :
                   <>
                     <div className="grid grid-cols-1">
-                      <label htmlFor="Email Form" className="mb-3">Email: </label>
-                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full">
+                      <label htmlFor="Email Form" className="mb-1 text-sm">Email: </label>
+                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
                           type="text" 
                           placeholder="Email..." 
-                          className="flex-1 outline-none bg-transparent w-96"
+                          className="flex-1 outline-none bg-transparent w-full"
                         />
                       </div>
 
-                      <label htmlFor="Username Form" className="mb-3 mt-3">Username: </label>
-                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full">
+                      <label htmlFor="Username Form" className="mb-1 text-sm mt-2">Username: </label>
+                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
                           type="text" 
                           placeholder="Username..." 
-                          className="flex-1 outline-none bg-transparent w-96"
+                          className="flex-1 outline-none bg-transparent w-full"
                         />
                       </div>
 
-                      <label htmlFor="Password Form" className="mb-3 mt-3">Password: </label>
-                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full">
+                      <label htmlFor="Password Form" className="mb-1 text-sm mt-2">Password: </label>
+                      <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
-                          type="text" 
+                          type="password" 
                           placeholder="Password..." 
                           className="flex-1 outline-none bg-transparent w-96"
                         />
@@ -112,11 +112,11 @@ function RegisterComponent() {
                       <Button 
                         label="Sign up"
                         // icon="pi pi-user-plus"
-                        size="small"
-                        className="mt-5 w-full"
+                        className="mt-4 w-full dark:bg-ayotaku-button dark:hover:bg-slate-400 outline-none"
                         style={{
-                          fontSize: '16px',
-                          textAlign: 'center'
+                          fontSize: '14px',
+                          textAlign: 'center',
+                          height: '30px'
                         }}
                       />
 
@@ -136,14 +136,14 @@ function RegisterComponent() {
                 }
               </div>
 
-              <Divider layout="vertical" className="hidden md:flex text-white">
+              <Divider layout="vertical" className="hidden md:flex text-white col-span-12 md:col-span-2 sm:col-span-2">
                 <span>OR</span>
               </Divider>
-              <Divider layout="horizontal" className="flex md:hidden">
+              <Divider layout="horizontal" className="flex md:hidden col-span-12 md:col-span-2 sm:col-span-2">
                 <span>OR</span>
               </Divider>
 
-              <div className="p-4 flex bg-ayotaku-box rounded-lg justify-center items-center">
+              <div className="p-4 flex bg-ayotaku-box rounded-lg justify-center items-center col-span-12 md:col-span-5 sm:col-span-5">
                 <div className="grid grid-cols-1">
                   Login Google
                 </div>
