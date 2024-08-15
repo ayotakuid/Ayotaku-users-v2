@@ -55,7 +55,7 @@ function RegisterComponent() {
   return (
     <>
       <Helmet>
-        <title>Ayotaku id - Sign up</title>
+        <title>Ayotaku.id - Sign up</title>
         <meta name="description" content="Selamat datang di Ayotaku.id! Ini adalah Website untuk Streaming Anime dan Downloadn Anime secara gratis. Kami ingin mempermudah para Otaku ataupun wibu diluar sana yang kesulitan untuk membeli Subscription Anime Legal ataupun Website sebelah yang penuh dengan iklan!"/>
       </Helmet>
 
@@ -177,7 +177,7 @@ function RegisterComponent() {
                 <div className="grid grid-cols-1">
 
                 <Button 
-                  className="flex items-center justify-center w-full px-4 py-2 dark:bg-white border border-gray-400 shadow-sm dark:text-black dark:hover:bg-gray-100 text-sm rounded-3xl"
+                  className="flex items-center justify-center w-full px-4 py-2 dark:bg-white border border-gray-400 shadow-sm dark:text-black dark:hover:bg-gray-100 text-sm rounded-full"
                   onClick={handlerSignUpGoogle}
                   loading={isLoadingButtonGoogle}
                 >
