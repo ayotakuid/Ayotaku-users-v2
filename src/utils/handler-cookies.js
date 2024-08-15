@@ -6,7 +6,7 @@ const setCookiesUser = (name, value, days) => {
     expiresIn = `;expires=${date.toUTCString()}`;
   }
 
-  document.cookie = `${name}=${(value || "")}${expiresIn};path=/`;
+  document.cookie = `${name}=${(value || "")}${expiresIn};path=/;SameSite=Strict;Secure`;
 }
 
 const getCookiesUser = (name) => {
@@ -22,6 +22,12 @@ const getCookiesUser = (name) => {
 
   return null;
 }
+
+const deleteCookiesUser = (name, path = '/', domain = '', secure = true, sameSite = 'Strict') => {
+  // Mengatur cookie dengan masa kadaluarsa di masa lalu
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}; domain=${domain}; ${secure ? 'Secure; ' : ''}SameSite=${sameSite}`;
+}
+
 
 const checkingCookiesUser = (name) => {
   const cookiesValue = getCookiesUser(name);
@@ -39,5 +45,6 @@ const checkingCookiesUser = (name) => {
 export default {
   setCookiesUser,
   getCookiesUser,
+  deleteCookiesUser,
   checkingCookiesUser
 };
