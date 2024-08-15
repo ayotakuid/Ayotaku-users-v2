@@ -30,8 +30,6 @@ function App() {
     }
   }, [setIsCookiesDefault]);
 
-  console.log(isCookiesDefault);
-
   return (
     <>
       <BrowserRouter>
