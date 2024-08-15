@@ -7,6 +7,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 // IMPORT UTILS
 import { URL_API_AYOTAKU } from '../utils/secrets.json';
+import Cookies from '../utils/handler-cookies';
 
 // IMPORT IMAGE
 import IconCirleAyotaku from '../image/icon-circle.svg';
@@ -21,6 +22,14 @@ function RegisterComponent() {
     setTimeout(() => {
       setIsLoadingPage(true)
     }, 1500)
+
+    setInterval(() => {
+      if (Cookies.getCookiesUser('ayotaku-isLogin') == 'true') {
+        navigate('/')
+        location.reload();
+        clearInterval()
+      }
+    }, 2000)
   }, [setIsLoadingPage]);
 
   const handlerClickHere = () => {
@@ -28,11 +37,19 @@ function RegisterComponent() {
   }
 
   const handlerSignUpGoogle = () => {
-    const url = `${URL_API_AYOTAKU}/user/auth/google`;
-    const windowName = 'Ayotaku id - Sign up with Google'
-    const windowSize = 'width=500,height=500,left=100,top=100';
+    if (Cookies.getCookiesUser('ayotaku-isLogin') == 'true') {
+      return
+    }
+    setIsLoadingButtonGoogle(true)
 
-    window.open(url, windowName, windowSize);
+    setTimeout(() => {
+      const url = `${URL_API_AYOTAKU}/user/auth/google`;
+      const windowName = 'Ayotaku id - Sign up with Google'
+      const windowSize = 'width=500,height=500,left=100,top=100';
+  
+      window.open(url, windowName, windowSize);
+      setIsLoadingButtonGoogle(false)
+    }, 1000)
   }
 
   return (
@@ -159,9 +176,10 @@ function RegisterComponent() {
               <div className="p-4 flex bg-ayotaku-box rounded-lg justify-center items-center col-span-12 md:col-span-5 sm:col-span-5">
                 <div className="grid grid-cols-1">
 
-                <button 
-                  className="flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-400 shadow-sm dark:text-black hover:bg-gray-100 text-sm rounded-3xl"
+                <Button 
+                  className="flex items-center justify-center w-full px-4 py-2 dark:bg-white border border-gray-400 shadow-sm dark:text-black dark:hover:bg-gray-100 text-sm rounded-3xl"
                   onClick={handlerSignUpGoogle}
+                  loading={isLoadingButtonGoogle}
                 >
                   {/* ICON SVG Google */}
                   <svg className="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -172,7 +190,7 @@ function RegisterComponent() {
                     <path fill="none" d="M0 0h48v48H0z"></path>
                   </svg>
                   Sign Up with Google
-                </button>
+                </Button>
 
                 </div>
               </div>
