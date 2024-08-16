@@ -14,6 +14,7 @@ import './style/global.css';
 
 // IMPORT ICONS
 import 'primeicons/primeicons.css';
+import { Toaster } from 'sonner';
         
 ReactDOM.createRoot(
   document.getElementById('root')
@@ -22,6 +23,7 @@ ReactDOM.createRoot(
     <PrimeReactProvider value={{ pt: Tailwind }}>
       <HelmetProvider>
         <App />
+        <Toaster />
       </HelmetProvider>
     </PrimeReactProvider>
   </React.StrictMode>,
