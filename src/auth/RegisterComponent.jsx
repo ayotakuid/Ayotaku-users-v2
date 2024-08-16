@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { Helmet } from "react-helmet-async";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { toast } from "sonner";
 
 // IMPORT UTILS
 import { URL_API_AYOTAKU } from '../utils/secrets.json';
@@ -14,10 +15,16 @@ import IconCirleAyotaku from '../image/icon-circle.svg';
 
 function RegisterComponent() {
   const navigate = useNavigate();
+  const locationPage = useLocation();
+  const queryParams = new URLSearchParams(locationPage.search);
+  const accountParams = queryParams.get('account')
 
+  // STATE MANAGEMENT
   const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [isLoadingButtonGoogle, setIsLoadingButtonGoogle] = useState(false);
+  const toastShowRef = useRef(false);
 
+  // USE EFFECT JIKA SUDAH LOGIN TIDAK BISA KE SINI
   useEffect(() => {
     setTimeout(() => {
       setIsLoadingPage(true)
@@ -31,6 +38,24 @@ function RegisterComponent() {
       }
     }, 2000)
   }, [setIsLoadingPage]);
+
+  // USE EFFECT PARAMS ACCOUNT NOT ACTIVE
+  useEffect(() => {
+    const promise = () => new Promise((resolve) => setTimeout(resolve, 1000));
+    if (accountParams === 'not_active' && !toastShowRef.current) {
+      console.log('test');
+      toast.promise(promise, {
+        loading: 'Loading...',
+        success: 'Berhasil Register, Silahkan cek Email untuk Activation Account!',
+        error: 'Error!',
+        position: 'bottom-right',
+        duration: 5000
+      });
+
+      toastShowRef.current = true;
+      return;
+    }
+  }, [queryParams])
 
   const handlerClickHere = () => {
     navigate('/');
