@@ -46,7 +46,7 @@ function RegisterComponent() {
       console.log('test');
       toast.promise(promise, {
         loading: 'Loading...',
-        success: 'Berhasil Register, Silahkan cek Email untuk Activation Account!',
+        success: 'Silahkan cek Email untuk Activation Account!',
         error: 'Error!',
         position: 'bottom-right',
         duration: 5000
@@ -105,7 +105,7 @@ function RegisterComponent() {
             <div className="grid items-center justify-center">
               <span className="grid grid-cols-1 items-center justify-center text-xs text-teal-400 text-opacity-70 w-96 text-center mt-3">
                 Enter your email, username and password below to create account or you can register via Google.
-                </span>
+              </span>
             </div>
           </div>
 

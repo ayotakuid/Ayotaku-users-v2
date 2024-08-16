@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { Helmet } from "react-helmet-async";
+import { toast } from "sonner";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import Cookies from '../utils/handler-cookies';
@@ -14,7 +15,9 @@ function HomeComponent({
   const locationPage = useLocation();
   const queryParams = new URLSearchParams(locationPage.search);
 
-  // STATE MANAGEMENT
+  // STATE MANAGEMENTE
+
+  // USE EFFECT UNTUK Checking Cookies Token
   useEffect(() => {
     if (queryParams.get('token')) {
       Cookies.setCookiesUser('ayotaku-token', queryParams.get('token'), 30);

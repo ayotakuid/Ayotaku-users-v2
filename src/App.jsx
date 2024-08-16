@@ -7,7 +7,7 @@ import { Button } from 'primereact/button';
 import Cookies from './utils/handler-cookies';
 import RegisterComponent from './auth/RegisterComponent';
 import HomeComponent from './component/HomeComponent';
-import AlertSuccessComponent from './component/alert/AlertSuccessComponent';
+import ActivatedAccountComponent from './component/alert/ActivatedAccountComponent';
 
 function App() {
   // STATE MANAGEMENT
@@ -55,8 +55,12 @@ function App() {
           />
 
           <Route 
-            path='/register/success'
-            element={<AlertSuccessComponent />}
+            path='/activate'
+            element={
+              (isCookiesDefault?.isLogin === 'false' || isCookiesDefault?.token === 'null')
+                ? <ActivatedAccountComponent />
+                : <Navigate to="/" />
+            }
           />
         </Routes>
       </BrowserRouter>
