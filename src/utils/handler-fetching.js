@@ -23,3 +23,32 @@ export async function handlerFetchingActivatedAccount (emailArg, codeArg) {
     throw err;
   }
 }
+
+export async function handlerFetchingProfileUser (token) {
+  const headerProfileUser = new Headers();
+  headerProfileUser.append("Authorization", `Bearer ${token}`);
+
+  const requestOptions = {
+    method: 'GET',
+    headers: headerProfileUser,
+    redirect: 'follow',
+  };
+
+  try {
+    const responseFetchingProfile = await fetch(`${URL_API_AYOTAKU}/user/api/profile`, requestOptions);
+    const returnData = await responseFetchingProfile.json();
+
+    if (!returnData?.data) {
+      return {
+        statusCode: 401,
+        status: 'unauthorized',
+        message:  'Token Expired',
+      };
+    }
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
