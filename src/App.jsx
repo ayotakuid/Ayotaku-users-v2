@@ -3,16 +3,25 @@ import { Helmet } from 'react-helmet-async';
 import { BrowserRouter, Route, Navigate, Routes, useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { Button } from 'primereact/button';
+import { PrimeIcons } from 'primereact/api';
 
 import Cookies from './utils/handler-cookies';
 import RegisterComponent from './auth/RegisterComponent';
 import HomeComponent from './component/HomeComponent';
 import ActivatedAccountComponent from './component/alert/ActivatedAccountComponent';
 
+
+// HANDLER FETCHING
+import { handlerFetchingProfileUser } from './utils/handler-fetching';
+import { toast } from 'sonner';
+
 function App() {
   // STATE MANAGEMENT
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [isCookiesDefault, setIsCookiesDefault] = useState({ isLogin: 'false', token: 'null' });
+  const [isProfileUser, setIsProfileUser] = useState(null);
+
+  const promise = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
   // SET DEFAULT COOKIES FIRST TIME VISIT
   useEffect(() => {
@@ -23,12 +32,40 @@ function App() {
     }
 
     if (Cookies.getCookiesUser('ayotaku-isLogin') || !Cookies.checkingCookiesUser('ayotaku-token').isExist) {
+      const tokenAyotaku = Cookies.getCookiesUser('ayotaku-token');
+
       setIsCookiesDefault({
         isLogin: Cookies.getCookiesUser('ayotaku-isLogin'),
         token: Cookies.getCookiesUser('ayotaku-token'),
       });
+
+      const responseProfileUser = async () => {
+        const response = await handlerFetchingProfileUser(tokenAyotaku);
+        return response;
+      }
+
+      responseProfileUser().then((response) => {
+        if (response?.statusCode === 401) {
+          Cookies.deleteCookiesUser('ayotaku-isLogin');
+          Cookies.deleteCookiesUser('ayotaku-token');
+
+          toast.promise(promise, {
+            loading: 'Loading...',
+            success: response?.message,
+            error: 'Error!',
+            duration: 1000,
+          });
+
+          return;
+        }
+
+        setIsProfileUser(response.data);
+      })
     }
-  }, [setIsCookiesDefault]);
+  }, [setIsCookiesDefault, setIsProfileUser]);
+
+  console.log(isProfileUser);
+  
 
   return (
     <>
