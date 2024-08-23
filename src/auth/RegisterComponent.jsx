@@ -12,6 +12,46 @@ import Cookies from '../utils/handler-cookies';
 
 // IMPORT IMAGE
 import IconCirleAyotaku from '../image/icon-circle.svg';
+import { handlerFetchingSignUp } from "../utils/handler-fetching";
+
+const validationFormSignUp = (isFormSignUp) => {
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(String(email).toLowerCase());
+  }
+
+  if (!isFormSignUp.email) {
+    return {
+      status: 'error',
+      message: 'Email required!',
+    };
+  }
+
+  if (!validateEmail(isFormSignUp.email)) {
+    return {
+      status: 'error',
+      message: 'Email is not Valid!',
+    }
+  }
+
+  if (!isFormSignUp.username) {
+    return {
+      status: 'error',
+      message: 'Username required!',
+    };
+  }
+
+  if (!isFormSignUp.password) {
+    return {
+      status: 'error',
+      message: 'Password required!'
+    }
+  }
+
+  return {
+    status: 'success',
+  };
+}
 
 function RegisterComponent() {
   const navigate = useNavigate();
@@ -21,8 +61,16 @@ function RegisterComponent() {
 
   // STATE MANAGEMENT
   const [isLoadingPage, setIsLoadingPage] = useState(false);
-  const [isLoadingButtonGoogle, setIsLoadingButtonGoogle] = useState(false);
+  const [isFormSignUp, setIsFormSignUp] = useState({
+    email: '',
+    username: '',
+    password: ''
+  });
   const toastShowRef = useRef(false);
+  
+  // STATE MANAGEMENT LOADING
+  const [isLoadingButtonGoogle, setIsLoadingButtonGoogle] = useState(false);
+  const [isLoadingButtonSignUp, setIsLoadingButtonSignUp] = useState(false);
 
   // USE EFFECT JIKA SUDAH LOGIN TIDAK BISA KE SINI
   useEffect(() => {
@@ -57,6 +105,16 @@ function RegisterComponent() {
     }
   }, [queryParams])
 
+  useEffect(() => {
+    window.addEventListener('message', (event) => {
+      if (event.origin === 'http://localhost:9001' && event.data.status === 'done') {
+        window.location.href = event.data.url
+      }
+    })
+
+    return () => window.removeEventListener('message', () => {});
+  })
+
   const handlerClickHere = () => {
     navigate('/');
   }
@@ -76,6 +134,42 @@ function RegisterComponent() {
       setIsLoadingButtonGoogle(false)
     }, 1000)
   }
+
+  const handlerSignUpForm = () => {
+    setIsLoadingButtonSignUp(true);
+
+    const validateFunc = validationFormSignUp(isFormSignUp);
+
+    if (validateFunc.status !== 'success') {
+      setIsLoadingButtonSignUp(false);
+      toast.warning(validateFunc.message)
+      return;
+    }
+
+    const responseSignUp = async () => {
+      const response = await handlerFetchingSignUp(isFormSignUp);
+      return response;
+    }
+
+    responseSignUp().then((response) => {
+      console.log(response);
+
+      setTimeout(() => {
+        setIsLoadingButtonSignUp(false)
+      }, 1500)
+    }).catch((err) => {
+      console.error(err);
+    })
+  };
+
+  const onChangeFormSignUp = (e) => {
+    const { name, value } = e.target;
+
+    setIsFormSignUp({
+      ...isFormSignUp,
+      [name]: value,
+    });
+  };
 
   return (
     <>
@@ -98,7 +192,7 @@ function RegisterComponent() {
                 >
                   <Skeleton circle={true} width={40} height={40} />
                 </SkeletonTheme>
-                : <img src={IconCirleAyotaku} alt="Icon Circle Ayotaku" className="w-10" />
+                : <img src={IconCirleAyotaku} alt="Icon Circle Ayotaku" className="w-12" />
               }
             </div>
             <h1 className="text-2xl grid items-center justify-center text-ayotaku-text-default mt-5">Sign Up</h1>
@@ -140,9 +234,12 @@ function RegisterComponent() {
                       <label htmlFor="Email Form" className="mb-1 text-sm">Email: </label>
                       <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
-                          type="text" 
-                          placeholder="Email..." 
+                          type="email" 
+                          name="email"
+                          placeholder="Email..."
+                          value={isFormSignUp.email}
                           className="flex-1 outline-none bg-transparent w-full"
+                          onChange={onChangeFormSignUp}
                         />
                       </div>
 
@@ -150,8 +247,11 @@ function RegisterComponent() {
                       <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
                           type="text" 
-                          placeholder="Username..." 
+                          name="username"
+                          placeholder="Username..."
+                          value={isFormSignUp.username}
                           className="flex-1 outline-none bg-transparent w-full"
+                          onChange={onChangeFormSignUp}
                         />
                       </div>
 
@@ -159,20 +259,24 @@ function RegisterComponent() {
                       <div className="flex items-center border border-gray-300 rounded-md p-2 w-full h-8 text-sm">
                         <input 
                           type="password" 
-                          placeholder="Password..." 
+                          name="password"
+                          placeholder="Password..."
+                          value={isFormSignUp.password}
                           className="flex-1 outline-none bg-transparent w-96"
+                          onChange={onChangeFormSignUp}
                         />
                       </div>
 
                       <Button 
                         label="Sign up"
-                        // icon="pi pi-user-plus"
                         className="mt-4 w-full dark:text-white dark:bg-ayotaku-button dark:hover:bg-slate-400 outline-none"
                         style={{
                           fontSize: '15px',
                           textAlign: 'center',
                           height: '30px'
                         }}
+                        loading={isLoadingButtonSignUp}
+                        onClick={handlerSignUpForm}
                       />
 
                       <div className="flex justify-center items-center mt-5 text-sm">
