@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter, Route, Navigate, Routes, useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
@@ -15,23 +15,40 @@ import ActivatedAccountComponent from './component/alert/ActivatedAccountCompone
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
 import { toast } from 'sonner';
 
+
 function App() {
   // STATE MANAGEMENT
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [isCookiesDefault, setIsCookiesDefault] = useState({ isLogin: 'false', token: 'null' });
   const [isProfileUser, setIsProfileUser] = useState(null);
+  
+  // REF MANAGEMENT
+  const toastShowRef = useRef(false);
 
   const promise = () => new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const toastMemorized = useMemo(() => {
+    return (response) => {
+      toast.promise(promise, {
+        loading: 'Loading...',
+        success: response?.message,
+        error: 'Error!',
+        duration: 1000,
+      })
+    }
+  }, []);
 
   // SET DEFAULT COOKIES FIRST TIME VISIT
   useEffect(() => {
     if (!Cookies.checkingCookiesUser('ayotaku-isLogin').isExist || !Cookies.checkingCookiesUser('ayotaku-token').isExist) {
+      setIsCookiesDefault({ isLogin: 'false', token: 'null' })
+      setIsProfileUser(null);
       Cookies.setCookiesUser('ayotaku-isLogin', 'false', 30)
       Cookies.setCookiesUser('ayotaku-token', 'null', 30)
       return;
     }
 
-    if (Cookies.getCookiesUser('ayotaku-isLogin') || !Cookies.checkingCookiesUser('ayotaku-token').isExist) {
+    if (Cookies.getCookiesUser('ayotaku-isLogin') === 'true' && Cookies.checkingCookiesUser('ayotaku-token').isExist) {
       const tokenAyotaku = Cookies.getCookiesUser('ayotaku-token');
 
       setIsCookiesDefault({
@@ -45,18 +62,24 @@ function App() {
       }
 
       responseProfileUser().then((response) => {
-        if (response?.statusCode === 401) {
-          Cookies.deleteCookiesUser('ayotaku-isLogin');
-          Cookies.deleteCookiesUser('ayotaku-token');
+        
+        if (response?.statusCode === 401 && !toastShowRef.current) {
+          Cookies.setCookiesUser('ayotaku-isLogin', 'false', 30)
+          Cookies.setCookiesUser('ayotaku-token', 'null', 30)
 
-          toast.promise(promise, {
-            loading: 'Loading...',
-            success: response?.message,
-            error: 'Error!',
-            duration: 1000,
-          });
-
+          toastShowRef.current = true;
+          toastMemorized(response);
+          setIsProfileUser(null);
+          setIsCookiesDefault({ isLogin: 'false', token: 'null' })
+          
           return;
+        }
+
+        if (response?.statusCode === 429 && !toastShowRef.current) {
+          toastShowRef.current = true;
+
+          toast.warning(response?.message, { duration: 1500 });
+          return
         }
 
         setIsProfileUser(response.data);
@@ -64,8 +87,6 @@ function App() {
     }
   }, [setIsCookiesDefault, setIsProfileUser]);
 
-  console.log(isProfileUser);
-  
 
   return (
     <>
@@ -74,7 +95,8 @@ function App() {
           <Route 
             path='/register'
             element={
-              (isCookiesDefault?.isLogin === 'false' || isCookiesDefault?.token === 'null') 
+              (isCookiesDefault?.isLogin === 'false' 
+                && isCookiesDefault?.token === 'null') 
                 ? <RegisterComponent /> 
                 : <Navigate to="/" />
             }
@@ -86,7 +108,8 @@ function App() {
               <HomeComponent 
                 isCookiesDefault={isCookiesDefault}
                 setIsCookiesDefault={setIsCookiesDefault}
-                isAuthUser={isAuthUser}
+                isProfileUser={isProfileUser}
+                setIsProfileUser={setIsProfileUser}
               />
             }
           />

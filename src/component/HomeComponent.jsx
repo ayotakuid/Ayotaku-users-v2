@@ -9,7 +9,8 @@ import Cookies from '../utils/handler-cookies';
 function HomeComponent({
   isCookiesDefault,
   setIsCookiesDefault,
-  isAuthUser
+  isProfileUser,
+  setIsProfileUser,
 }) {
   const navigate = useNavigate();
   const locationPage = useLocation();
@@ -37,6 +38,7 @@ function HomeComponent({
 
   const handlerClickButtonLogout = () => {
     setIsCookiesDefault({ isLogin: 'false', token: 'null' })
+    setIsProfileUser(null)
     Cookies.deleteCookiesUser('ayotaku-isLogin')
     Cookies.deleteCookiesUser('ayotaku-token')
     navigate('/')
@@ -71,6 +73,10 @@ function HomeComponent({
             className="dark:text-white mx-3 my-5"
             onClick={handlerClickButtonLogout}
           />
+
+          <div>
+            
+          </div>
         </>
       }
     </>
