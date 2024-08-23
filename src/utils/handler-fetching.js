@@ -39,13 +39,49 @@ export async function handlerFetchingProfileUser (token) {
     const returnData = await responseFetchingProfile.json();
 
     if (!returnData?.data) {
+      if (returnData?.statusCode === 401) {
+        return {
+          statusCode: 401,
+          status: 'unauthorized',
+          message:  'Token Expired',
+        };
+      }
+
       return {
-        statusCode: 401,
-        status: 'unauthorized',
-        message:  'Token Expired',
+        statusCode: 429,
+        status: 'too many request',
+        message: returnData?.message,
       };
     }
 
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function handlerFetchingSignUp(data) {
+  const headersFetchingSignup = new Headers();
+  headersFetchingSignup.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    _email: data?.email,
+    _username: data?.username,
+    _password: data?.password
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: headersFetchingSignup,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  try {
+    const responseFetchingSignup = await fetch(`${URL_API_AYOTAKU}/user/api/signup`, requestOptions);
+    const returnData = await responseFetchingSignup.json();
+    
     return returnData;
   } catch (err) {
     console.error(err);
