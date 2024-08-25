@@ -36,6 +36,10 @@ function HomeComponent({
     navigate('/register');
   }
 
+  const handlerClickButtonSignIn = () => {
+    navigate('/login');
+  }
+
   const handlerClickButtonLogout = () => {
     setIsCookiesDefault({ isLogin: 'false', token: 'null' })
     setIsProfileUser(null)
@@ -48,6 +52,7 @@ function HomeComponent({
     <>
       <Helmet>
         <title>Ayotaku.id - Home</title>
+        <meta name="description" content="Selamat datang di Ayotaku.id! Ini adalah Website untuk Streaming Anime dan Downloadn Anime secara gratis. Kami ingin mempermudah para Otaku ataupun wibu diluar sana yang kesulitan untuk membeli Subscription Anime Legal ataupun Website sebelah yang penuh dengan iklan!"/>
       </Helmet>
       {
         (
@@ -57,11 +62,19 @@ function HomeComponent({
         ? 
         <>
           <Button 
-            label="Sign Up"
+            label="Sign up"
             size="small"
             icon="pi pi-user-plus"
             className="dark:text-white mx-3 my-5"
             onClick={handlerClickButtonSignUp}
+          />
+          
+          <Button 
+            label="Sign in"
+            size="small"
+            icon="pi pi-user-plus"
+            className="dark:text-white mx-3 my-5"
+            onClick={handlerClickButtonSignIn}
           />
         </>
         : 
@@ -73,10 +86,6 @@ function HomeComponent({
             className="dark:text-white mx-3 my-5"
             onClick={handlerClickButtonLogout}
           />
-
-          <div>
-            
-          </div>
         </>
       }
     </>
