@@ -14,6 +14,7 @@ import ActivatedAccountComponent from './component/alert/ActivatedAccountCompone
 // HANDLER FETCHING
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
 import { toast } from 'sonner';
+import LoginComponent from './auth/LoginComponent';
 
 
 function App() {
@@ -98,6 +99,16 @@ function App() {
               (isCookiesDefault?.isLogin === 'false' 
                 && isCookiesDefault?.token === 'null') 
                 ? <RegisterComponent /> 
+                : <Navigate to="/" />
+            }
+          />
+
+          <Route 
+            path='/login'
+            element={
+              (isCookiesDefault?.isLogin === 'false'
+                && isCookiesDefault?.token === 'null')
+                ? <LoginComponent />
                 : <Navigate to="/" />
             }
           />
