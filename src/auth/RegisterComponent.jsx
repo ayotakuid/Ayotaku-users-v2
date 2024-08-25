@@ -64,7 +64,8 @@ function RegisterComponent() {
   const [isFormSignUp, setIsFormSignUp] = useState({
     email: '',
     username: '',
-    password: ''
+    password: '',
+    type: 'web',
   });
   const toastShowRef = useRef(false);
   
@@ -152,11 +153,34 @@ function RegisterComponent() {
     }
 
     responseSignUp().then((response) => {
-      console.log(response);
+
+      if (response.status === 'fail') {
+        setTimeout(() => {
+          setIsFormSignUp({
+            email: '',
+            username: '',
+            password: '',
+            type: 'web',
+          });
+          setIsLoadingButtonSignUp(false)
+          toast.warning(response.message);
+        }, 500)
+
+        return;
+      }
 
       setTimeout(() => {
+        setIsFormSignUp({
+          email: '',
+          username: '',
+          password: '',
+          type: 'web',
+        });
         setIsLoadingButtonSignUp(false)
+        toast.success(response.message);
       }, 1500)
+
+      return;
     }).catch((err) => {
       console.error(err);
     })
