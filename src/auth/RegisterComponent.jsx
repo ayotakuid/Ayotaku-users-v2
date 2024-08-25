@@ -117,7 +117,7 @@ function RegisterComponent() {
   })
 
   const handlerClickHere = () => {
-    navigate('/');
+    navigate('/login');
   }
 
   const handlerSignUpGoogle = () => {
@@ -356,7 +356,7 @@ function RegisterComponent() {
                           <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.8-5.7l-7.7-6.1c-2.1 1.5-4.9 2.5-8 2.5-6.3 0-11.6-4.2-13.4-10.1l-7.7 6C6.8 42.1 14.7 48 24 48z"></path>
                           <path fill="none" d="M0 0h48v48H0z"></path>
                         </svg>
-                        Sign Up with Google
+                        Sign up with Google
                       </Button>
                     </>
                   }
