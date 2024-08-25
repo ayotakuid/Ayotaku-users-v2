@@ -68,7 +68,8 @@ export async function handlerFetchingSignUp(data) {
   const raw = JSON.stringify({
     _email: data?.email,
     _username: data?.username,
-    _password: data?.password
+    _password: data?.password,
+    _type: data?.type,
   });
 
   const requestOptions = {
