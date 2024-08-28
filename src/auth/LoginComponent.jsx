@@ -7,6 +7,8 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 // IMPORT UTILS
 import Cookies from '../utils/handler-cookies';
+import { URL_API_AYOTAKU } from '../utils/secrets.json';
+import { handlerFetchingSignIn } from '../utils/handler-fetching';
 
 // IMPORT IMAGE
 import IconCirleAyotaku from '../image/icon-circle.svg';
@@ -15,7 +17,25 @@ function LoginComponent() {
   const navigate = useNavigate();
 
   // STATE MANAGEMENT
+  const [isFormSignin, setIsFormSignin] = useState({
+    username: '',
+    password: '',
+  })
+
+  // STATE MANAGEMENT LOADING
   const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [isLoadingButtonGoogle, setIsLoadingButtonGoogle] = useState(false);
+  const [isLoadingButtonSignin, setIsLoadingButtonSignin] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('message', (event) => {
+      if (event.origin === `${URL_API_AYOTAKU}` && event.data.status === 'done') {
+        window.location.href = event.data.url;
+      }
+    })
+
+    return () => window.removeEventListener('message', () => {});
+  })
 
   useEffect(() => {
     setTimeout(() => {
@@ -33,6 +53,42 @@ function LoginComponent() {
 
   const handlerClickHere = () => {
     navigate('/register')
+  }
+
+  const handlerSignInGoogle = () => {
+    const stateLogin = Cookies.getCookiesUser('ayotaku-isLogin');
+    const tokenLogin = Cookies.getCookiesUser('ayotaku-token');
+    if (stateLogin == 'true' && tokenLogin != null) {
+      return
+    }
+
+    setIsLoadingButtonGoogle(true);
+
+    setTimeout(() => {
+      const url = `${URL_API_AYOTAKU}/user/auth/google`;
+      const windowName = 'Ayotaku id - Sign in with Google'
+      const windowSize = 'width=500,height=500,left=100,top=100';
+      
+      window.open(url, windowName, windowSize);
+      setIsLoadingButtonGoogle(false);
+    }, 1000)
+  }
+
+  const handlerOnClickButtonSignin = () => {
+    setIsLoadingButtonSignin(true);
+
+    setTimeout(() => {
+      setIsLoadingButtonSignin(false);
+    }, 1500)
+  }
+
+  const onChangeFormSignIn = (e) => {
+    const { name, value } = e.target;
+
+    setIsFormSignin({
+      ...isFormSignin,
+      [name]: value,
+    });
   }
 
   return (
@@ -100,9 +156,9 @@ function LoginComponent() {
                           type="text" 
                           name="username"
                           placeholder="Username..."
-                          // value={isFormSignUp.username}
+                          value={isFormSignin.username}
                           className="flex-1 outline-none bg-transparent w-full"
-                          // onChange={onChangeFormSignUp}
+                          onChange={onChangeFormSignIn}
                         />
                       </div>
 
@@ -112,9 +168,9 @@ function LoginComponent() {
                           type="password" 
                           name="password"
                           placeholder="Password..."
-                          // value={isFormSignUp.password}
+                          value={isFormSignin.password}
                           className="flex-1 outline-none bg-transparent w-96"
-                          // onChange={onChangeFormSignUp}
+                          onChange={onChangeFormSignIn}
                         />
                       </div>
 
@@ -126,8 +182,8 @@ function LoginComponent() {
                           textAlign: 'center',
                           height: '30px'
                         }}
-                        // loading={isLoadingButtonSignUp}
-                        // onClick={handlerSignUpForm}
+                        loading={isLoadingButtonSignin}
+                        onClick={handlerOnClickButtonSignin}
                       />
 
                       <div className="flex justify-center items-center mt-5 text-sm">
@@ -172,8 +228,8 @@ function LoginComponent() {
                     <>
                       <Button 
                         className="flex items-center justify-center w-full px-4 py-2 dark:bg-white border border-gray-400 shadow-sm dark:text-black dark:hover:bg-gray-100 text-sm rounded-full"
-                        // onClick={handlerSignUpGoogle}
-                        // loading={isLoadingButtonGoogle}
+                        onClick={handlerSignInGoogle}
+                        loading={isLoadingButtonGoogle}
                       >
                         {/* ICON SVG Google */}
                         <svg className="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
