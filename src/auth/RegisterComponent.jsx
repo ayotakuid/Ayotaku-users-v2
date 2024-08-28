@@ -60,7 +60,6 @@ function RegisterComponent() {
   const accountParams = queryParams.get('account')
 
   // STATE MANAGEMENT
-  const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [isFormSignUp, setIsFormSignUp] = useState({
     email: '',
     username: '',
@@ -70,6 +69,7 @@ function RegisterComponent() {
   const toastShowRef = useRef(false);
   
   // STATE MANAGEMENT LOADING
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
   const [isLoadingButtonGoogle, setIsLoadingButtonGoogle] = useState(false);
   const [isLoadingButtonSignUp, setIsLoadingButtonSignUp] = useState(false);
 
@@ -108,7 +108,7 @@ function RegisterComponent() {
 
   useEffect(() => {
     window.addEventListener('message', (event) => {
-      if (event.origin === 'http://localhost:9001' && event.data.status === 'done') {
+      if (event.origin === `${URL_API_AYOTAKU}` && event.data.status === 'done') {
         window.location.href = event.data.url
       }
     })
