@@ -89,3 +89,31 @@ export async function handlerFetchingSignUp(data) {
     throw err;
   }
 }
+
+export async function handlerFetchingSignIn(data) {
+  const headersFetchingSignin = new Headers();
+  headersFetchingSignin.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    _username: data?.username,
+    _password: data?.password,
+    _type: 'web',
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: headersFetchingSignin,
+    body: raw,
+    redirect: 'follow',
+  };
+
+  try {
+    const responseFetchingSignin = await fetch(`${URL_API_AYOTAKU}/user/api/signin`, requestOptions);
+    const returnData = await responseFetchingSignin.json();
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
