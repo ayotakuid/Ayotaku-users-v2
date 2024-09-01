@@ -12,6 +12,25 @@ import { handlerFetchingSignIn } from '../utils/handler-fetching';
 
 // IMPORT IMAGE
 import IconCirleAyotaku from '../image/icon-circle.svg';
+import { toast } from "sonner";
+
+const validationFormSignIn = (isFormSignin) => {
+  if (!isFormSignin.username) {
+    return {
+      status: 'error',
+      message: 'Username required!',
+    };
+  }
+
+  if (!isFormSignin.password) {
+    return {
+      status: 'error',
+      message: 'Password required!',
+    };
+  }
+
+  return { status: 'success' };
+}
 
 function LoginComponent() {
   const navigate = useNavigate();
@@ -74,11 +93,40 @@ function LoginComponent() {
     }, 1000)
   }
 
-  const handlerOnClickButtonSignin = () => {
+  const handlerOnClickButtonSignin = async () => {
     setIsLoadingButtonSignin(true);
 
+    const validationForm = validationFormSignIn(isFormSignin);
+
+    if (validationForm.status !== 'success') {
+      setIsLoadingButtonSignin(false)
+      toast.warning(validationForm.message);
+      return;
+    }
+
+    const response = await handlerFetchingSignIn(isFormSignin);
+
+    if (response.status === 'fail') {
+      setIsLoadingButtonSignin(false);
+      setIsFormSignin({
+        username: '',
+        password: '',
+      })
+      toast.error(response.message);
+      return
+    }
+
+    setIsFormSignin({
+      username: '',
+      password: '',
+    })
+    Cookies.setCookiesUser('ayotaku-isLogin', 'true', 30);
+    Cookies.setCookiesUser('ayotaku-token', response.user.tokenWeb, 30);
+    toast.success(response.message)
+    
     setTimeout(() => {
       setIsLoadingButtonSignin(false);
+      navigate('/');
     }, 1500)
   }
 
