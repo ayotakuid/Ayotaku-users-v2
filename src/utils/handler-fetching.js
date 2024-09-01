@@ -43,7 +43,15 @@ export async function handlerFetchingProfileUser (token) {
         return {
           statusCode: 401,
           status: 'unauthorized',
-          message:  'Token Expired',
+          message: 'Token Expired',
+        };
+      }
+
+      if (returnData?.status === 'fail') {
+        return {
+          statusCode: 401,
+          status: 'token not match',
+          message: returnData?.message,
         };
       }
 
@@ -53,7 +61,7 @@ export async function handlerFetchingProfileUser (token) {
         message: returnData?.message,
       };
     }
-
+    
     return returnData;
   } catch (err) {
     console.error(err);
