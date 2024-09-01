@@ -82,7 +82,6 @@ function App() {
           toast.warning(response?.message, { duration: 1500 });
           return
         }
-
         setIsProfileUser(response.data);
       })
     }
