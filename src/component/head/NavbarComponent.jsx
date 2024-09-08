@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { classNames } from 'primereact/utils';
 import { Button } from 'primereact/button';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 // IMPORT UTILS
-import { BellIcon, UserPlusIcon, UserIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { BellIcon, UserPlusIcon, UserIcon } from '@heroicons/react/24/outline';
 import AyotakuLogo from '../../image/icon-circle.svg';
-import ImageRenderComponent from '../utils/ImageRenderComponent';
-import SvgRenderComponent from '../utils/SvgRenderComponent';
+
+// IMPORT COMPONENT
+import ProfileMenuDropdown from './ProfileMenuDropdown';
+import MenuNotifikasiComponent from './MenuNotifikasiComponent';
+import ProfileImageNavbarComponent from './ProfileImageNavbarComponent';
 
 const navigation = [
   { name: 'Home', href: '/', current: false },
@@ -20,6 +22,8 @@ function NavbarComponent({
   isLoadingEntirePage,
   isCookiesDefault,
   isProfileUser,
+  setIsProfileUser,
+  setIsCookiesDefault,
 }) {
   const navigate = useNavigate();
 
@@ -70,8 +74,8 @@ function NavbarComponent({
             </div>
 
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex flex-shrink-0 items-center">
-                <img className='h-10 w-auto' src={AyotakuLogo} alt='Ayotaku.id' />
+              <div className="flex flex-shrink-0 items-center" onClick={() => navigate('/')}>
+                <img className='h-10 w-auto' src={AyotakuLogo} alt='Ayotaku.id'/>
               </div>
 
               <div className='hidden sm:ml-6 sm:block'>
@@ -180,112 +184,27 @@ function NavbarComponent({
                   </button>
 
                   <div className='relative ml-3'>
-                    <div>
-                      <button
-                        type='button'
-                        className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                        id="user-menu-button"
-                        aria-expanded={isUserMenuOpen}
-                        aria-haspopup="true"
-                        onClick={() => {
-                          setIsUserMenuOpen(!isUserMenuOpen)
-                          setIsNotifMenuOpen(false)
-                          setIsMobileMenuOpen(false)
-                        }}  // Toggle user dropdown
-                      >
-                        <span className="absolute -inset-1.5"></span>
-                        <span className="sr-only">Open user menu</span>
-                        {
-                          (isProfileUser?.via_register === 'google')
-                          ?
-                          <ImageRenderComponent 
-                            imageUrl={isProfileUser?.from_google.picture}
-                            classTailwind={'h-8 w-8 rounded-full'}
-                            altText={isProfileUser?.from_google.email}
-                          />
-                          :
-                          <SvgRenderComponent 
-                            svgString={isProfileUser?.from_google.picture}
-                            classTailwind={'h-8 w-8 rounded-full'}
-                          />
-                        }
-                      </button>
-                    </div>
+                    {/* Profile Image di Navbar */}
+                    <ProfileImageNavbarComponent 
+                      isLoadingEntirePage={isLoadingEntirePage}
+                      isUserMenuOpen={isUserMenuOpen}
+                      setIsUserMenuOpen={setIsUserMenuOpen}
+                      setIsNotifMenuOpen={setIsNotifMenuOpen}
+                      setIsMobileMenuOpen={setIsMobileMenuOpen}
+                      isProfileUser={isProfileUser}
+                    />
 
                     {/* Menu dropdown */}
                     {isUserMenuOpen && (
-                      <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-0">Your Profile</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-1">Settings</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Sign out</a>
-                      </div>
+                      <ProfileMenuDropdown 
+                        setIsCookiesDefault={setIsCookiesDefault}
+                        setIsProfileUser={setIsProfileUser}
+                      />
                     )}
 
                     {/* MENU NOTIFIKASI */}
                     {isNotifMenuOpen && (
-                      <div 
-                        className='absolute right-12 z-10 mt-2 w-72 sm:w-96 origin-top-right rounded-md bg-ayotaku-normal-light py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none' 
-                        role='menu' 
-                        aria-orientation='vertical' 
-                        aria-labelledby='notif-menu-button' 
-                        tabIndex='-1'
-                      >
-
-                        <div className="group relative flex items-center gap-x-3 rounded-lg p-2 text-sm leading-6 hover:bg-ayotaku-light">
-                          {
-                            (!isLoadingEntirePage) 
-                            ?
-                              <div className="flex h-auto w-12 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                <img src="https://cdn.myanimelist.net/images/anime/1825/142258.jpg" className='rounded-lg' alt="" />
-                              </div> 
-                            :
-                              <SkeletonTheme
-                                baseColor='#e3e3e3'
-                                highlightColor='#969696'
-                                duration={3000}
-                              >
-                                <Skeleton className='flex h-auto w-12 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white' width={48} height={67}/>
-                              </SkeletonTheme> 
-                          }
-                          <div className="flex-auto">
-                            <a href="#" className="block font-semibold text-gray-900 text-ayotaku-text-sm sm:text-sm">
-                              Tokidoki Bosotto Russia-go de Dereru Tonari ...
-                            </a>
-                            <p className="mt-3 text-gray-600 text-ayotaku-text-xs sm:text-ayotaku-text-sm">Episode 05 Updated!</p>
-                          </div>
-                        </div>
-
-                        <div className="group relative flex items-center gap-x-3 rounded-lg p-2 text-sm leading-6 hover:bg-ayotaku-light">
-                          <div className="flex h-auto w-12 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                            <img src="https://cdn.myanimelist.net/images/anime/1607/143547.jpg" className='rounded-lg' alt="" />
-                          </div>
-                          <div className="flex-auto">
-                            <a href="#" className="block font-semibold text-gray-900 text-sm">
-                              Giji Harem
-                            </a>
-                            <p className="mt-1 text-gray-600 text-xs">Episode 10 Updated!</p>
-                          </div>
-                        </div>
-
-                        <div className="group relative flex items-center gap-x-3 rounded-lg p-2 text-sm leading-6 hover:bg-ayotaku-light">
-                          <div className="flex h-auto w-12 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                            <img src="https://cdn.myanimelist.net/images/anime/1420/143707.jpg" className='rounded-lg' alt="" />
-                          </div>
-                          <div className="flex-auto">
-                            <a href="#" className="block font-semibold text-gray-900 text-sm">
-                              Gimai Seikatsu
-                            </a>
-                            <p className="mt-1 text-gray-600 text-xs">Episode 06 Updated!</p>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 divide-x divide-gray-900/5 bg-ayotaku-light">
-                          <a href="#" className="flex items-center justify-center p-1 text-ayotaku-text-sm text-sm font-semibold text-gray-900 hover:underline hover:underline-offset-2">
-                            Show more...
-                          </a>
-                        </div>
-
-                      </div>
+                      <MenuNotifikasiComponent isLoadingEntirePage={isLoadingEntirePage} />
                     )}
                   </div>
                 </div>
