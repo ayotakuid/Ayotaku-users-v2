@@ -96,12 +96,13 @@ function AccountComponent({ isProfileUser }) {
           <p className="mb-5 max-w-2xl leading-6 text-ayotaku-text-xs">Email, Username, Display Username & Photo</p>
         </div>
         
-        <div className="grid grid-cols-1">
+        <div className="grid grid-cols-1 justify-items-center">
           <SvgRenderComponent 
             svgString={isProfileUser?.from_google.picture}
             size={70}
           />
-          <div className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300">
+          <div 
+            className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300">
             Generate Photo
           </div>          
         </div>
