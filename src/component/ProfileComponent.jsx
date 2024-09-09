@@ -19,7 +19,6 @@ function ProfileComponent({ isProfileUser }) {
         <div className="text-2xl sm:text-3xl font-bold">Profile Settings</div>
         <div className="mt-2 text-ayotaku-text-xs sm:text-ayotaku-text-sm">{`Setting Account mu [ Information Account, Bookmarks Title, Change Password ]`}</div>
         <Divider />
-
         
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
@@ -44,7 +43,13 @@ function ProfileComponent({ isProfileUser }) {
                 >
                   Bookmarks
                 </div>
-                <div className="col-span-full bg-ayotaku-dark hover:bg-ayotaku-super-dark hover:duration-500 px-3 py-1 rounded-md cursor-pointer text-base">
+                <div 
+                  className={classNames(
+                    location.pathname !== '/profile/me/password' ? "bg-ayotaku-dark hover:bg-ayotaku-super-dark" : "bg-ayotaku-super-dark",
+                    "col-span-full hover:duration-500 px-3 py-1 rounded-md cursor-pointer text-base"
+                  )}
+                  onClick={() => navigate('/profile/me/password')}
+                >
                   Change Password
                 </div>
               </div>
