@@ -47,6 +47,14 @@ function AccountComponent({ isProfileUser }) {
   const onChangeDisplayUsername = (e) => {
     const { name, value } = e.target;
 
+    if (value.length > 15) {
+      setIsErrorValidate({
+        status: true,
+        text: "Limit 15 character!"
+      });
+      return;
+    }
+
     if (value.length === 0) {
       setIsErrorValidate({
         status: true,
