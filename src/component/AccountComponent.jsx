@@ -6,7 +6,10 @@ import SvgRenderComponent from "./utils/SvgRenderComponent";
 
 // IMPORT UTILS
 import { formatDateToString } from '../utils/handler-date';
+import { handlerFetchingDisplayUsername } from '../utils/handler-fetching';
+import Cookies from '../utils/handler-cookies';
 import { toast } from "sonner";
+import { Button } from "primereact/button";
 
 const validateInput = (text) => {
   const regex = /^[a-zA-Z0-9 _-]+$/;
@@ -37,8 +40,12 @@ function BadgeViaRegisterComponent({ isViaRegister }) {
   )
 }
 
-function AccountComponent({ isProfileUser }) {
+function AccountComponent({ isProfileUser, setIsProfileUser }) {
 
+  // STATE MANAGEMENT LOADING
+  const [isLoadingConfirm, setIsLoadingConfirm] = useState(false);
+
+  // STATE MANAGEMENT GLOBAL DI ACCOUNT COMPONENT
   const [isErrorValidate, setIsErrorValidate] = useState({ status: false, text: '' });
   const [isValueInputDisplayUsername, setIsValueInputDisplayUsername] = useState({
     displayUsername: '',
@@ -86,13 +93,29 @@ function AccountComponent({ isProfileUser }) {
     });
   };
 
-  const onClickConfirmButton = () => {
+  const onClickConfirmButton = async () => {
+    setIsLoadingConfirm(true);
     if (!isValueInputDisplayUsername.displayUsername) {
+      setIsLoadingConfirm(false);
       setIsErrorValidate({ status: true, text: 'Display Username tidak boleh kosong!' })
       return;
     }
+    
+    const responseFetcing = await handlerFetchingDisplayUsername(isValueInputDisplayUsername, Cookies.getCookiesUser("ayotaku-token"));
 
-    toast.success(isValueInputDisplayUsername.displayUsername);
+    if (responseFetcing.status === 'fail') {
+      toast.error(responseFetcing.message);
+      return;
+    }
+
+    setTimeout(() => {
+      setIsLoadingConfirm(false);
+      setIsProfileUser({
+        ...isProfileUser,
+        displayUsername: isValueInputDisplayUsername.displayUsername,
+      });
+      toast.success(responseFetcing.message);
+    }, 1000)
     return;
   }
 
@@ -110,7 +133,11 @@ function AccountComponent({ isProfileUser }) {
             size={70}
           />
           <div 
-            className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300">
+            className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300"
+            onClick={() => {
+              toast.warning("Coming Soon", { duration: 1000 })
+            }}
+          >
             Generate Photo
           </div>          
         </div>
@@ -152,17 +179,19 @@ function AccountComponent({ isProfileUser }) {
                         onChange={onChangeDisplayUsername}
                       />
                       {(!isErrorValidate.status) ? (
-                        <button 
+                        <Button 
                           type="button" 
-                          className="block mx-0.5 mt-2 px-3 py-0.5 rounded-md bg-ayotaku-box dark:text-ayotaku-text-default text-ayotaku-text-sm hover:bg-ayotaku-super-dark hover:text-gray-400 hover:duration-500"
-                          onClick={onClickConfirmButton}
-                        >
-                          Confirm
-                        </button>
+                          className="block mx-0.5 mt-2 px-3 py-0.5 rounded-md bg-ayotaku-box dark:text-ayotaku-text-default dark:text-ayotaku-text-sm hover:bg-ayotaku-super-dark hover:text-gray-400 hover:duration-500"
+                          onClick={async () => await onClickConfirmButton()}
+                          label="Confirm"
+                          loading={isLoadingConfirm}
+                          size="sm"
+                          severity="none"
+                        />
                       ) : (
                         <p className="mx-0.5 text-ayotaku-text-xs text-red-400">{isErrorValidate.text}</p>
                       )}
-                      {(!isValueInputDisplayUsername.displayUsername) ? '' : isValueInputDisplayUsername.displayUsername}
+                      <p className="mx-0.5">{(!isValueInputDisplayUsername.displayUsername) ? '' : isValueInputDisplayUsername.displayUsername}</p>
                     </>
                   ) : (
                     isProfileUser?.displayUsername

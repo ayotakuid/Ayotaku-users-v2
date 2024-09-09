@@ -125,3 +125,30 @@ export async function handlerFetchingSignIn(data) {
     throw err;
   }
 }
+
+export async function handlerFetchingDisplayUsername(data, token) {
+  const headersUsername = new Headers();
+  headersUsername.append("Content-Type", "application/json");
+  headersUsername.append("Authorization", `Bearer ${token}`);
+
+  const dataRaw = JSON.stringify({
+    _displayUsername: data?.displayUsername,
+  });
+
+  const requestOptions = {
+    method: 'PUT',
+    headers: headersUsername,
+    body: dataRaw,
+    redirect: 'follow'
+  };
+
+  try {
+    const responseFetchingUsername = await fetch(`${URL_API_AYOTAKU}/user/api/profile`, requestOptions);
+    const returnData = await responseFetchingUsername.json();
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
