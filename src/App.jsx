@@ -18,6 +18,7 @@ import BookmarksComponent from './component/BookmarksComponent';
 // HANDLER FETCHING
 import Cookies from './utils/handler-cookies';
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
+import ChangePasswordComponent from './component/utils/ChangePasswordComponent';
 
 // FUNCTION INI SANGAT PENTING!
 // INI UNTUK VALIDASI DULUAN SEBELUM COMPONENT DI RENDER UNTUK MEMERIKSA APAKAH COOKIES SUDAH BENAR ATAU TIDAK!
@@ -136,11 +137,24 @@ function App() {
             >
               <Route 
                 path='me'
-                element={<AccountComponent isProfileUser={isProfileUser}/>}
+                element={
+                  <AccountComponent 
+                    isProfileUser={isProfileUser}
+                    setIsProfileUser={setIsProfileUser}
+                  />
+                }
               />
+
               <Route 
                 path='bookmarks'
                 element={<BookmarksComponent />}
+              />
+              
+              <Route 
+                path='me/password'
+                element={
+                  <ChangePasswordComponent />
+                }
               />
             </Route>
           </Route>
