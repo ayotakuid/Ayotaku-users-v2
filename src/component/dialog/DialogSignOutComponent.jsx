@@ -59,7 +59,7 @@ function DialogSignOutComponent({
   return (
     <>
       <Dialog 
-        header="Sign Out"
+        header="Are you sure to Sign out?"
         draggable={false}
         visible={isDialogSignOut}
         style={{ width: '40vw' }} 
@@ -73,9 +73,7 @@ function DialogSignOutComponent({
         onHide={() => {
           setIsDialogSignOut(false);
         }}
-      >
-        <p className="text-sm dark:text-red-500 my-2">Are sure to Sign out?</p>
-      </Dialog>
+      />
     </>
   )
 }
