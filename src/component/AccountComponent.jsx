@@ -10,6 +10,7 @@ import { handlerFetchingDisplayUsername } from '../utils/handler-fetching';
 import Cookies from '../utils/handler-cookies';
 import { toast } from "sonner";
 import { Button } from "primereact/button";
+import ImageRenderComponent from "./utils/ImageRenderComponent";
 
 const validateInput = (text) => {
   const regex = /^[a-zA-Z0-9 _-]+$/;
@@ -128,18 +129,30 @@ function AccountComponent({ isProfileUser, setIsProfileUser }) {
         </div>
         
         <div className="grid grid-cols-1 justify-items-center">
-          <SvgRenderComponent 
-            svgString={isProfileUser?.from_google.picture}
-            size={70}
-          />
-          <div 
-            className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300"
-            onClick={() => {
-              toast.warning("Coming Soon", { duration: 1000 })
-            }}
-          >
-            Generate Photo
-          </div>          
+          {
+            (isProfileUser?.via_register === 'form') ? (
+              <SvgRenderComponent 
+                svgString={isProfileUser?.from_google.picture}
+                size={70}
+              />
+            ) : (
+              <>
+                <ImageRenderComponent 
+                  imageUrl={isProfileUser?.from_google.picture}
+                  classTailwind={'rounded-full w-20'}
+                  altText={isProfileUser?.email}
+                />
+                <div 
+                  className="text-ayotaku-text-sm w-28 px-2 py-1 my-2 rounded-md text-center text-ayotaku-text-default bg-ayotaku-box cursor-pointer hover:bg-ayotaku-super-dark hover:duration-300"
+                  onClick={() => {
+                    toast.warning("Coming Soon", { duration: 1000 })
+                  }}
+                >
+                  Generate Photo
+                </div>          
+              </>
+            )
+          }
         </div>
 
         <div className="mt-6 border-t border-gray-100">

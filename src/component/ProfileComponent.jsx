@@ -43,15 +43,19 @@ function ProfileComponent({ isProfileUser }) {
                 >
                   Bookmarks
                 </div>
-                <div 
-                  className={classNames(
-                    location.pathname !== '/profile/me/password' ? "bg-ayotaku-dark hover:bg-ayotaku-super-dark" : "bg-ayotaku-super-dark",
-                    "col-span-full hover:duration-500 px-3 py-1 rounded-md cursor-pointer text-base"
-                  )}
-                  onClick={() => navigate('/profile/me/password')}
-                >
-                  Change Password
-                </div>
+                {
+                  (isProfileUser?.via_register === 'form') ? (
+                    <div 
+                      className={classNames(
+                        location.pathname !== '/profile/me/password' ? "bg-ayotaku-dark hover:bg-ayotaku-super-dark" : "bg-ayotaku-super-dark",
+                        "col-span-full hover:duration-500 px-3 py-1 rounded-md cursor-pointer text-base"
+                      )}
+                      onClick={() => navigate('/profile/me/password')}
+                    >
+                      Change Password
+                    </div>
+                  ) : ''
+                }
               </div>
             </div>
 
