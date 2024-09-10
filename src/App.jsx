@@ -153,7 +153,7 @@ function App() {
               <Route 
                 path='me/password'
                 element={
-                  <ChangePasswordComponent />
+                  (isProfileUser?.via_register === 'form') ? <ChangePasswordComponent /> : <Navigate to="/profile/me" />
                 }
               />
             </Route>
