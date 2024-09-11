@@ -9,6 +9,17 @@ const setCookiesUser = (name, value, days) => {
   document.cookie = `${name}=${(value || "")}${expiresIn};path=/;SameSite=Strict;Secure`;
 }
 
+const setCookiesMenit = (name, value, minutes) => {
+  let expiresIn = "";
+  if (minutes) {
+    const date = new Date();
+    date.setTime(date.getTime() + (minutes * 60 * 1000)); // Konversi menit ke milidetik
+    expiresIn = `;expires=${date.toUTCString()}`;
+  }
+
+  document.cookie = `${name}=${(value || "")}${expiresIn};path=/;SameSite=Strict;Secure`;
+}
+
 const getCookiesUser = (name) => {
   const nameCookies = `${name}=`;
   const cookiesArray = document.cookie.split(';');
@@ -44,6 +55,7 @@ const checkingCookiesUser = (name) => {
 
 export default {
   setCookiesUser,
+  setCookiesMenit,
   getCookiesUser,
   deleteCookiesUser,
   checkingCookiesUser
