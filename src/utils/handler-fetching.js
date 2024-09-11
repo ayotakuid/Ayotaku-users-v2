@@ -152,3 +152,25 @@ export async function handlerFetchingDisplayUsername(data, token) {
     throw err;
   }
 }
+
+export async function handlerSendLinkResetPasswor(token) {
+  const headerSendLink = new Headers();
+  headerSendLink.append("Content-Type", "application/json");
+  headerSendLink.append("Authorization", `Bearer ${token}`);
+
+  const requestOptions = {
+    method: 'POST',
+    headers: headerSendLink,
+    redirect: 'follow',
+  };
+
+  try {
+    const responseFetchingReset = await fetch(`${URL_API_AYOTAKU}/user/api/ticket/reset`, requestOptions);
+    const returnData = await responseFetchingReset.json();
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
