@@ -1,7 +1,29 @@
 import { Button } from "primereact/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+// IMPORT FETCHING & UTILS
+import { handlerSendLinkResetPasswor } from '../../utils/handler-fetching';
+import Cookies from '../../utils/handler-cookies';
+
+const checkButtonResetVisible = () => {
+  const savedTime = Cookies.getCookiesUser('ayotaku-reset');
+
+  if (savedTime) {
+    const currentTime = new Date().getTime();
+    const elapseTime = currentTime - savedTime;
+
+    const fiveMinutes = 5 * 60 * 1000;
+
+    // JIKA MASIH BELOM LEBIH DARI 5 MENIT MAKA SEMBUNYIKAN BUTTON
+    if (elapseTime < fiveMinutes) {
+      return true;
+    }
+
+    return false;
+  }
+}
 
 function ChangePasswordComponent({ isProfileUser }) {
 
@@ -13,11 +35,46 @@ function ChangePasswordComponent({ isProfileUser }) {
         codeParams = queryParams.get('code'),
         expiredParams = queryParams.get('exp');
 
+  // STATE MANAGEMENT BUTTON
+  const [isLoadingButtonReset, setIsLoadingButtonReset] = useState(false);
+  const [isVisibleButtonReset, setIsVisibleButtonReset] = useState(false);
+
+  useEffect(() => {
+    const isButtonResetHidden = checkButtonResetVisible();
+    setIsVisibleButtonReset(!isButtonResetHidden);
+  }, [])
+
   useEffect(() => {
     if (isProfileUser?.via_register === 'google') {
       navigate('/profile/me');
     }
-  })
+  }, [isProfileUser, navigate]);
+
+  const handlerOnClickSendLink = async () => {
+    setIsLoadingButtonReset(true)
+    const responseSendLink = await handlerSendLinkResetPasswor(Cookies.getCookiesUser('ayotaku-token'));
+
+    if (responseSendLink.status === 'fail') {
+      setIsLoadingButtonReset(false);
+      toast.error(responseSendLink.message);
+      return;
+    }
+
+    // Simpan waktu penekanan tombol di Cookies (waktu sekarang dalam milidetik)
+    const now = new Date().getTime();
+    Cookies.setCookiesMenit('ayotaku-reset', now, 5); // Simpan selama 5 menit
+
+    // Set timeout untuk menyembunyikan tombol selama 5 menit
+    setTimeout(() => {
+      setIsVisibleButtonReset(false);
+      setIsLoadingButtonReset(false);
+      toast.success(responseSendLink.message);
+    }, 1500);
+
+    setTimeout(() => {
+      setIsVisibleButtonReset(true); // Tampilkan kembali tombol setelah 5 menit
+    }, 5 * 60 * 1000);
+  };
 
   return (
     <>
@@ -30,17 +87,20 @@ function ChangePasswordComponent({ isProfileUser }) {
                 NOTE: Change password adalah fitur untuk melakukan Perubahan Password User, Kalian hanya perlu menekan button untuk dibawah ini. Dan Ayotaku akan mengirim kan sebuah Email yang berisi kan URL untuk melakukan reset/ganti Password untuk kalian 😊.
               </div>
 
-              <div className="block">
-                <Button 
-                  label="Send Link"
-                  className="dark:bg-ayotaku-button dark:text-gray-900 text-ayotaku-text-sm px-2 py-1.5 mt-2 hover:dark:bg-ayotaku-normal-dark duration-500 focus:outline-none focus:shadow-none"
-                  size="sm"
-                  severity="none"
-                  onClick={() => {
-                    toast.success('Berhasil dikirim!')
-                  }}
-                />
-              </div>
+              {
+                isVisibleButtonReset ? (
+                  <div className="block">
+                    <Button 
+                      label="Send Link"
+                      className="dark:bg-ayotaku-button dark:text-gray-900 text-ayotaku-text-sm px-2 py-1.5 mt-2 hover:dark:bg-ayotaku-normal-dark duration-500 focus:outline-none focus:shadow-none"
+                      size="sm"
+                      severity="none"
+                      loading={isLoadingButtonReset}
+                      onClick={handlerOnClickSendLink}
+                    />
+                  </div>
+                ) : 'Tunggu 5 menit untuk reset password lagi.'
+              }
             </>
           ) : (
             <>
