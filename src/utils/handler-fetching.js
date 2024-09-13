@@ -153,7 +153,7 @@ export async function handlerFetchingDisplayUsername(data, token) {
   }
 }
 
-export async function handlerSendLinkResetPasswor(token) {
+export async function handlerSendLinkResetPassword(token) {
   const headerSendLink = new Headers();
   headerSendLink.append("Content-Type", "application/json");
   headerSendLink.append("Authorization", `Bearer ${token}`);
@@ -167,6 +167,31 @@ export async function handlerSendLinkResetPasswor(token) {
   try {
     const responseFetchingReset = await fetch(`${URL_API_AYOTAKU}/user/api/ticket/reset`, requestOptions);
     const returnData = await responseFetchingReset.json();
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function handlerValidateTicketReset(token, data) {
+  const headerValidateTicket = new Headers();
+  headerValidateTicket.append("Content-Type", "application/json");
+  headerValidateTicket.append("Authorization", `Bearer ${token}`);
+
+  const rawData = JSON.stringify(data)
+
+  const requestOptions = {
+    method: 'POST',
+    headers: headerValidateTicket,
+    body: rawData,
+    redirect: 'follow'
+  }
+
+  try {
+    const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/ticket`, requestOptions);
+    const returnData = await responseFetching.json();
 
     return returnData;
   } catch (err) {
