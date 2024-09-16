@@ -152,7 +152,9 @@ function ChangePasswordComponent({ isProfileUser }) {
             </>
           ) : (
             <>
-              <FormResetPassword />
+              <FormResetPassword 
+                codeParams={codeParams}
+              />
             </>
           )
         }
