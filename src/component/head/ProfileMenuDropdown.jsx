@@ -35,13 +35,6 @@ function ProfileMenuDropdown({
           className="block px-4 py-1.5 text-sm text-gray-700 cursor-pointer" 
           role="menuitem" 
           tabIndex="-1"
-        >
-          Settings
-        </a>
-        <a 
-          className="block px-4 py-1.5 text-sm text-gray-700 cursor-pointer" 
-          role="menuitem" 
-          tabIndex="-1"
           onClick={handlerClickButtonLogout}
         >
           Sign out
