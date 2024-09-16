@@ -199,3 +199,28 @@ export async function handlerValidateTicketReset(token, data) {
     throw err;
   }
 }
+
+export async function handlerChangePassword(token, data) {
+  const headerChangePassword = new Headers();
+  headerChangePassword.append("Content-Type", "application/json");
+  headerChangePassword.append("Authorization", `Bearer ${token}`);
+
+  const rawData = JSON.stringify(data);
+
+  const requestOptions = {
+    method: 'PUT',
+    headers: headerChangePassword,
+    body: rawData,
+    redirect: 'follow',
+  };
+
+  try {
+    const responseChangePassword = await fetch(`${URL_API_AYOTAKU}/user/api/ticket/reset`, requestOptions);
+    const returnData = await responseChangePassword.json();
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
