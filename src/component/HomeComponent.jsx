@@ -58,7 +58,7 @@ function HomeComponent({
         setIsCookiesDefault={setIsCookiesDefault}
       />
 
-      <div className="flex justify-center my-5">
+      <div className="flex my-5">
         <Outlet />
       </div>
     </>
