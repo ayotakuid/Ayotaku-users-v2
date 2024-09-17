@@ -57,6 +57,13 @@ function HomeComponent({
         setIsProfileUser={setIsProfileUser}
         setIsCookiesDefault={setIsCookiesDefault}
       />
+      
+      <div className="w-full bg-ayotaku-button dark:bg-ayotaku-normal-dark text-gray-900 dark:text-gray-100 text-center py-2 px-7 flex items-center justify-center space-x-2 shadow-md">
+        <i className="pi pi-bell text-lg"></i>
+        <span className="text-xs sm:text-sm font-semibold">
+          Selamat Datang di Ayotaku.id! Tempat Streaming dan Download Anime tanpa ribet!
+        </span>
+      </div>
 
       <div className="flex my-5">
         <Outlet />
