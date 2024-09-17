@@ -26,6 +26,9 @@ export default {
           "ayotaku-text-sm": "12px",
         }
       },
+    container: {
+      center: true
+    }
   },
   plugins: [],
 };
