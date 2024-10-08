@@ -14,7 +14,7 @@ function MainContentComponent() {
     { id: 3, img: 'https://cdn.myanimelist.net/images/anime/1904/142675l.jpg', title: 'Make Heroine ga Oosugiru!' },
     { id: 4, img: 'https://cdn.myanimelist.net/images/anime/1164/143459l.jpg', title: 'Shoushimin Series' },
     { id: 5, img: 'https://cdn.myanimelist.net/images/anime/1397/131726l.jpg', title: '2.5-jigen no Ririsa' },
-    { id: 6, img: 'https://cdn.myanimelist.net/images/anime/1915/139450l.jpg', title: 'Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai' },
+    { id: 6, img: 'https://cdn.myanimelist.net/images/anime/1372/145018l.jpg?', title: 'Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai' },
     { id: 7, img: 'https://cdn.myanimelist.net/images/anime/1932/142249l.jpg', title: 'Gimai Seikatsu' },
     { id: 8, img: 'https://cdn.myanimelist.net/images/anime/1035/135213l.jpg', title: 'Giji Harem' },
   ]);
@@ -56,7 +56,10 @@ function MainContentComponent() {
                   slidesPerView: 3.5,
                 },
                 1280: {
-                  slidesPerView: 4.5,
+                  slidesPerView: 4,
+                },
+                1536: {
+                  slidesPerView: 5.2
                 }
               }}
               onSlideChange={(swiper) => 
@@ -74,8 +77,10 @@ function MainContentComponent() {
                         // Tambahkan kelas khusus untuk slide di kiri dan kanan dua slide dari slide aktif
                         isActiveSwiper === index
                           ? 'bg-opacity-100' // Slide aktif
-                          : (index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length ||
-                             index === (isActiveSwiper + 2) % isDataImage.length)
+                          : (
+                              index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length ||
+                              index === (isActiveSwiper + 2) % isDataImage.length
+                            )
                             ? 'opacity-40' // Dua slide kiri atau kanan dari yang aktif
                             : 'opacity-65' // Slide lain yang lebih jauh
                       )}
@@ -85,12 +90,13 @@ function MainContentComponent() {
                       // Perbaikan logika pengecekan slide aktif
                       isActiveSwiper === index ? 'bg-opacity-10' : 'bg-opacity-50',
                       'absolute bottom-0 left-0 w-full h-full bg-black duration-500 text-white text-center py-2 rounded-2xl',
-                      (index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length || index === (isActiveSwiper + 2) % isDataImage.length) ? 'bg-opacity-70' : ''
+                      (index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length || index === (isActiveSwiper + 2) % isDataImage.length) ? 'bg-opacity-70' : '',
+                      (index === (isActiveSwiper - 3 + isDataImage.length) % isDataImage.length || index === (isActiveSwiper + 3) % isDataImage.length) ? 'bg-opacity-80' : '',
                     )}>
                     </div>
                     <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-2 rounded-b-lg">
                       <span className='block w-full truncate whitespace-nowrap text-sm px-5'>
-                        {item.title} {index}
+                        {item.title}
                       </span>
                     </div>
                   </SwiperSlide>
