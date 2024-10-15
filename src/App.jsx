@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
-import { BrowserRouter, Route, Navigate, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Navigate, Routes, useNavigate, Outlet } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 import { toast } from 'sonner';
@@ -13,12 +13,13 @@ import LoginComponent from './auth/LoginComponent';
 import ProfileComponent from './component/ProfileComponent';
 import AccountComponent from './component/AccountComponent';
 import BookmarksComponent from './component/BookmarksComponent';
+import ChangePasswordComponent from './component/utils/ChangePasswordComponent';
+import MainContentComponent from './component/MainContentComponent';
 
 
 // HANDLER FETCHING
 import Cookies from './utils/handler-cookies';
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
-import ChangePasswordComponent from './component/utils/ChangePasswordComponent';
 
 // FUNCTION INI SANGAT PENTING!
 // INI UNTUK VALIDASI DULUAN SEBELUM COMPONENT DI RENDER UNTUK MEMERIKSA APAKAH COOKIES SUDAH BENAR ATAU TIDAK!
@@ -122,6 +123,29 @@ function App() {
               />
             }
           >
+            <Route
+              index
+              element={<MainContentComponent />}
+            />
+
+            <Route
+              path='anime'
+              element={
+                <>
+                  <Outlet />
+                </>
+              }
+            >
+              <Route 
+                index
+                element={<h1>ini anime</h1>}
+              />
+              
+              <Route 
+                path='detail/id'
+                element={<h1>id id</h1>}
+              />
+            </Route>
 
             {/* Route yang masih ada di dalam profile */}
             <Route 
@@ -159,6 +183,7 @@ function App() {
                 }
               />
             </Route>
+
           </Route>
           {/* END ROUTE MAIN LAYOUT */}
 
