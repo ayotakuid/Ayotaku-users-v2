@@ -1,13 +1,19 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
+import { useEffect, useState } from 'react';
+import { classNames } from 'primereact/utils';
+
+// IMPORT UTILS FETCHING
+import { handlerFetchingRecommendAnime } from '../utils/handler-fetching-animes';
 
 // IMPORT UTILS SWIPER
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import { useState } from 'react';
-import { classNames } from 'primereact/utils';
+import { toast } from 'sonner';
 
 function MainContentComponent() {
   const [isActiveSwiper, setIsActiveSwiper] = useState(0);
+  const [isSwiper, setIsSwiper] = useState(null);
+  const [isDataRecommend, setIsDataRecommend] = useState(null);
   const [isDataImage] = useState([
     { id: 1, img: 'https://cdn.myanimelist.net/images/anime/1825/142258l.jpg', title: 'Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san' },
     { id: 2, img: 'https://cdn.myanimelist.net/images/anime/1635/145486l.jpg', title: 'Tsue to Tsurugi no Wistoria' },
@@ -18,6 +24,27 @@ function MainContentComponent() {
     { id: 7, img: 'https://cdn.myanimelist.net/images/anime/1932/142249l.jpg', title: 'Gimai Seikatsu' },
     { id: 8, img: 'https://cdn.myanimelist.net/images/anime/1035/135213l.jpg', title: 'Giji Harem' },
   ]);
+
+  useEffect(() => {
+    const fetchRecommendAnime = async () => {
+      try {
+        const response = await handlerFetchingRecommendAnime(10);
+        const newSwipers = response?.data?.recommend?.map((item) => ({
+          id: item.slug_anime,
+          img: item.edit_img || item.default_img,
+          title: item.detail.nama_anime.romanji
+        })) || [];
+
+        setIsSwiper(newSwipers); // Update state sekaligus
+        setIsDataRecommend(newSwipers.length < 8 ? isDataImage : newSwipers);
+      } catch (err) {
+        console.error(err);
+        toast.error('Terjadi error di recommend Anime!');
+      }
+    };
+
+    fetchRecommendAnime(); // Panggil fungsi async
+  }, [setIsSwiper, setIsDataRecommend]);
 
   return (
     <>
@@ -33,7 +60,7 @@ function MainContentComponent() {
         <div className='col-span-12'>
           <div className="flex w-full h-52 xs:h-48 md:h-80 lg:h-80">
             <Swiper
-              loop={true}
+              loop={isSwiper?.length >= 5}
               spaceBetween={10}
               centeredSlides={true}
               grabCursor={true}
@@ -67,7 +94,7 @@ function MainContentComponent() {
               }
             >
               {
-                isDataImage?.map((item, index) => (
+                isDataRecommend?.map((item, index) => (
                   <SwiperSlide key={item.id} className="relative flex justify-center items-center select-none">
                     <img
                       src={item.img}
@@ -78,8 +105,8 @@ function MainContentComponent() {
                         isActiveSwiper === index
                           ? 'bg-opacity-100' // Slide aktif
                           : (
-                              index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length ||
-                              index === (isActiveSwiper + 2) % isDataImage.length
+                              index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length ||
+                              index === (isActiveSwiper + 2) % isSwiper?.length
                             )
                             ? 'opacity-40' // Dua slide kiri atau kanan dari yang aktif
                             : 'opacity-65' // Slide lain yang lebih jauh
@@ -90,11 +117,16 @@ function MainContentComponent() {
                       // Perbaikan logika pengecekan slide aktif
                       isActiveSwiper === index ? 'bg-opacity-10' : 'bg-opacity-50',
                       'absolute bottom-0 left-0 w-full h-full bg-black duration-500 text-white text-center py-2 rounded-2xl',
-                      (index === (isActiveSwiper - 2 + isDataImage.length) % isDataImage.length || index === (isActiveSwiper + 2) % isDataImage.length) ? 'bg-opacity-70' : '',
-                      (index === (isActiveSwiper - 3 + isDataImage.length) % isDataImage.length || index === (isActiveSwiper + 3) % isDataImage.length) ? 'bg-opacity-80' : '',
+                      (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'bg-opacity-70' : '',
+                      (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'bg-opacity-80' : '',
                     )}>
                     </div>
-                    <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-2 rounded-b-lg">
+                    <div className={classNames(
+                      'absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-2 rounded-b-lg',
+                      (index === (isActiveSwiper - 1 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 1) % isSwiper?.length) ? 'text-opacity-50' : '',
+                      (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'text-opacity-20' : '',
+                      (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'text-opacity-10' : '',
+                    )}>
                       <span className='block w-full truncate whitespace-nowrap text-sm px-5'>
                         {item.title}
                       </span>
