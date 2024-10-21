@@ -65,7 +65,7 @@ function HomeComponent({
         </span>
       </div>
 
-      <div className="flex my-5">
+      <div className="flex">
         <Outlet />
       </div>
     </>
