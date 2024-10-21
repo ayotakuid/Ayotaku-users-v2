@@ -59,3 +59,21 @@ button {
   object-fit: cover;
   border-radius: 1rem
 }
+
+html {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #1f2937 #2f303e; /* Warna thumb dan track */
+}
+
+body::-webkit-scrollbar {
+  width: 8px; /* Lebar scrollbar */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #ffffff; /* Warna thumb */
+  border-radius: 9999px;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #E5E7EB; /* Warna track */
+}
