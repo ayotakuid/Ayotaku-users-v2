@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { classNames } from 'primereact/utils';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 // IMPORT UTILS FETCHING
@@ -13,6 +14,7 @@ import 'swiper/css';
 
 // IMPORT ICON
 import { PlayIcon } from '@heroicons/react/24/solid';
+import LastUpdatedComponent from './card/LastUpdatedComponent';
 
 function MainContentComponent() {
   const [isActiveSwiper, setIsActiveSwiper] = useState(0);
@@ -28,6 +30,8 @@ function MainContentComponent() {
     { id: 7, img: 'https://cdn.myanimelist.net/images/anime/1932/142249l.jpg', title: 'Gimai Seikatsu' },
     { id: 8, img: 'https://cdn.myanimelist.net/images/anime/1035/135213l.jpg', title: 'Giji Harem' },
   ]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecommendAnime = async () => {
@@ -105,13 +109,17 @@ function MainContentComponent() {
               >
                 {
                   isDataRecommend?.map((item, index) => (
-                    <SwiperSlide key={item.id} className="relative flex justify-center items-center select-none">
-                      <a 
-                        href={`anime/detail/${item.id}`} 
-                        className='w-full h-full object-cover rounded-2xl'>
+                    <SwiperSlide 
+                      key={item.id} 
+                      className="relative flex justify-center items-center select-none"
+                    >
+                      <div 
+                        className='w-full h-full object-cover rounded-2xl hover:cursor-pointer'
+                        onClick={() => navigate(`anime/${item.id}`)}
+                      >
                         <img
                           src={item.img}
-                          alt=""
+                          alt={item.title}
                           className={classNames(
                             'w-full h-full object-cover rounded-2xl',
                             // Tambahkan kelas khusus untuk slide di kiri dan kanan dua slide dari slide aktif
@@ -144,7 +152,7 @@ function MainContentComponent() {
                             {item.title}
                           </span>
                         </div>
-                      </a>
+                      </div>
                     </SwiperSlide>
                   ))
                 }
@@ -155,73 +163,7 @@ function MainContentComponent() {
       </div>
 
       {/* Section Last Updated */}
-      <div className="grid grid-cols-12 gap-4 my-10 mx-5">
-
-        <div className="col-span-12">
-          <div className="flex items-center justify-center w-full mt-4">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="px-3 text-gray-500">Last Updated</span>
-            <div className="flex-grow border-t border-gray-300"></div>
-          </div>
-        </div>
-
-        {
-          isDataRecommend?.map((item) => (
-            <a 
-              href="" 
-              key={item.id} 
-              className='col-span-12 md:col-span-3 gap-1 bg-ayotaku-super-dark text-ayotaku-text-default rounded-lg mb-2'
-            >
-              <div className='grid grid-cols-12 h-full'>
-                <div className='col-span-4'>
-                  <img src={item.img} alt={item.title} className='w-36 md:w-40 h-full object-cover rounded-md hover:opacity-50 duration-500' />
-                </div>
-
-                <div className='col-span-8 flex flex-col mx-2'>
-                  <div className="font-bold mb-2 px-1 pt-2 text-sm md:text-base line-clamp-2 hover:underline">{item.title}</div>
-                  <div className="w-full h-px bg-gray-600"></div>
-                  <div className='grid grid-cols-1 text-ayotaku-text-xs md:text-ayotaku-text-sm m-2 gap-1'>
-
-                    <div className='col-span-1 flex justify-between items-center'>
-                      <div className='flex items-center hover:underline'> 
-                        <PlayIcon className='w-4 mr-1'/>
-                        <span>Episode 01</span>
-                      </div>
-                      <span className='text-opacity-40 text-ayotaku-text-default'>21/10/2024</span>
-                    </div>
-
-                    <div className='col-span-1 flex justify-between items-center'>
-                      <div className='flex items-center hover:underline'> 
-                        <PlayIcon className='w-4 mr-1'/>
-                        <span>Episode 02</span>
-                      </div>
-                      <span className='text-opacity-40 text-ayotaku-text-default'>21/10/2024</span>
-                    </div>
-
-                    <div className='col-span-1 flex justify-between items-center'>
-                      <div className='flex items-center hover:underline'> 
-                        <PlayIcon className='w-4 mr-1'/>
-                        <span>Episode 03</span>
-                      </div>
-                      <span className='text-opacity-40 text-ayotaku-text-default'>21/10/2024</span>
-                    </div>
-
-                    <div className='col-span-1 flex justify-between items-center'>
-                      <div className='flex items-center hover:underline'> 
-                        <PlayIcon className='w-4 mr-1'/>
-                        <span>Episode 04</span>
-                      </div>
-                      <span className='text-opacity-40 text-ayotaku-text-default'>21/10/2024</span>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </a>
-          ))
-        }
-        
-      </div>
+      <LastUpdatedComponent />
     </div>
     </>
   );
