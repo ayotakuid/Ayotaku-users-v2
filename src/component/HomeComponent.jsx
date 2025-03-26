@@ -9,6 +9,7 @@ import Cookies from '../utils/handler-cookies';
 
 // IMPORT COMPONENT
 import NavbarComponent from '../component/head/NavbarComponent';
+import FooterMainComponent from "./footer/FooterMainComponent";
 
 function HomeComponent({
   isCookiesDefault,
@@ -65,9 +66,13 @@ function HomeComponent({
         </span>
       </div>
 
-      <div className="flex">
-        <Outlet />
+      <div className="flex flex-col min-h-screen">
+        <main className="flex-grow">
+          <Outlet />
+        </main>
+        <FooterMainComponent />
       </div>
+
     </>
   )
 }
