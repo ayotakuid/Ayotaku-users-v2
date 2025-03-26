@@ -15,6 +15,7 @@ import 'swiper/css';
 // IMPORT ICON
 import { PlayIcon } from '@heroicons/react/24/solid';
 import LastUpdatedComponent from './card/LastUpdatedComponent';
+import SuggestedForTodayComponent from './card/SuggestedForTodayComponent';
 
 function MainContentComponent() {
   const [isActiveSwiper, setIsActiveSwiper] = useState(0);
@@ -164,6 +165,7 @@ function MainContentComponent() {
 
       {/* Section Last Updated */}
       <LastUpdatedComponent />
+      <SuggestedForTodayComponent />
     </div>
     </>
   );
