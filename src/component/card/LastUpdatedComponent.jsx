@@ -8,12 +8,15 @@ import { formatDateLastUpdate } from "../../utils/handler-date";
 import { Button } from "primereact/button";
 import { Tooltip } from "primereact/tooltip";
 import BoxFilterSeasonComponent from "../alert/BoxFilterSeasonComponent";
+import { classNames } from "primereact/utils";
 
 function LastUpdatedComponent() {
   const [isDataLastUpdate, setIsDataLastUpdate] = useState(null);
   const [isShowUpFilter, setIsShowUpFilter] = useState(false);
-  const [isLoadMoreCount, setIsLoadMoreCount] = useState(10);
+  const [isLoadMoreCount, setIsLoadMoreCount] = useState(8);
   const [isLoadingLoadMore, setIsLoadingLoadMore] = useState(false);
+  const [isFilterSeason, setIsFilterSeason] = useState([]);
+  const [isFilterYear, setIsFilterYear] = useState([]);
 
   const navigate = useNavigate();
 
@@ -24,6 +27,11 @@ function LastUpdatedComponent() {
         season: season,
         limit: limit
       });
+
+      if (response?.data.length === 0) {
+        toast.error(`Data Anime Season ${season} ${year} Kosong!`);
+        return;
+      }
       
       setIsDataLastUpdate(response?.data);
     } catch (err) {
@@ -33,19 +41,19 @@ function LastUpdatedComponent() {
   }
 
   const clickLoadMoreLastUpdate = async () => {
-    const countingLoadMoreState = isLoadMoreCount + 10;
+    const countingLoadMoreState = isLoadMoreCount + 4;
     setIsLoadingLoadMore(true);
     setIsLoadMoreCount(countingLoadMoreState);
-    
+
     setTimeout(() => {
-      fetchLastUpdateAnime({ limit: countingLoadMoreState });
+      fetchLastUpdateAnime({ limit: countingLoadMoreState, year: isFilterYear.length === 0 ? null : isFilterYear, season: isFilterSeason.length === 0 ? null : isFilterSeason });
       setIsLoadingLoadMore(false);
     }, 1000)
   }
 
   useEffect(() => {
-    fetchLastUpdateAnime({ limit: isLoadMoreCount });
-  }, [setIsDataLastUpdate])
+    fetchLastUpdateAnime({ limit: isLoadMoreCount, year: isFilterYear.length === 0 ? null : isFilterYear, season: isFilterSeason.length === 0 ? null : isFilterSeason });
+  }, [setIsDataLastUpdate, isFilterSeason, isFilterYear]);
   return (
     <>
       <div className="grid grid-cols-12 gap-4 my-10 mx-5 sm:mx-10 md:mx-20 lg:mx-24">
@@ -57,17 +65,21 @@ function LastUpdatedComponent() {
           </div>
 
           <div className="flex items-end justify-end w-full">
-            <Tooltip target=".filter-button" content="Filter Season" className="text-ayotaku-text-sm px-0 py-1"/>
+            <Tooltip target=".filter-button" content="Filter" className="text-ayotaku-text-sm px-0 py-1"/>
             <button
-              className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-lg shadow duration-300 hover:bg-ayotaku-dark filter-button"
+              className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-lg shadow duration-300 hover:bg-ayotaku-dark filter-button my-1"
               data-pr-position="top"
               onClick={() => setIsShowUpFilter(!isShowUpFilter)}
             >
               <AdjustmentsHorizontalIcon className='h-5 w-5 flex-none dark:text-white'/>
             </button>
-
-            <BoxFilterSeasonComponent isShowUpFilter={isShowUpFilter} />
           </div>
+            <BoxFilterSeasonComponent 
+              isShowUpFilter={isShowUpFilter}
+              setIsFilterSeason={setIsFilterSeason}
+              setIsFilterYear={setIsFilterYear}
+              setIsLoadMoreCount={setIsLoadMoreCount}
+            />
         </div>
 
         {
