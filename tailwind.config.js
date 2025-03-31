@@ -25,6 +25,12 @@ export default {
         fontSize: {
           "ayotaku-text-xs": "10px",
           "ayotaku-text-sm": "12px",
+        },
+        accentColor: {
+          "ayotaku-accent-checkbox": "#3b3d51",
+        },
+        ringColor: {
+          "ayotaku-ring": "#3b3d51",
         }
       },
     container: {
