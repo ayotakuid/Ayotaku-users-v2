@@ -38,7 +38,7 @@ function BoxFilterSeasonComponent({ isShowUpFilter, setIsFilterSeason, setIsFilt
       "grid grid-cols-1 gap-4 p-4 rounded-md bg-ayotaku-super-dark shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-xs",
     )}>
       <div className="font-bold text-base">Filter Season</div>
-      <div className="grid grid-cols-4 sm:grid-cols-12 gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 group">
         {["Winter", "Spring", "Summer", "Fall"].map((season) => (
           <label key={season} className="flex items-center">
             <input
@@ -51,16 +51,16 @@ function BoxFilterSeasonComponent({ isShowUpFilter, setIsFilterSeason, setIsFilt
                     : [...prev, season]
                 );
               }}
-              className="mr-2"
+              className="mr-2 w-4 h-4 accent-ayotaku-accent-checkbox group-hover:cursor-pointer border-gray-300 focus:ring-ayotaku-ring cursor-pointer"
             />
-            {season}
+            <span className="group-hover:cursor-pointer">{season}</span>
           </label>
         ))}
       </div>
 
       <div className="font-bold text-base">Filter Year</div>
       <div className="grid grid-cols-1 sm:grid-cols-2">
-        <div className="grid grid-cols-4 sm:grid-cols-6 gap-1">
+        <div className="grid grid-cols-4 sm:grid-cols-6 gap-1 group">
           {Array.from({ length: 16 }, (_, i) => new Date().getFullYear() - i).map(
             (year) => (
               <label key={year} className="flex items-center">
@@ -74,9 +74,9 @@ function BoxFilterSeasonComponent({ isShowUpFilter, setIsFilterSeason, setIsFilt
                         : [...prev, year]
                     );
                   }}
-                  className="mr-2"
+                  className="mr-2 w-4 h-4 accent-ayotaku-accent-checkbox group-hover:cursor-pointer border-gray-300 focus:ring-ayotaku-ring cursor-pointer"
                 />
-                {year}
+                <span className="group-hover:cursor-pointer">{year}</span>
               </label>
             )
           )}
