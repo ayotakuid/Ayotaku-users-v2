@@ -13,6 +13,7 @@ export async function handlerFetchingRecommendAnime(number_max) {
   try {
     const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/anime/recommend?max_recommend=${number_max}`, requestOptions);
     const returnData = await responseFetching.json();
+
     return returnData;
   } catch (err) {
     console.error(err);
@@ -39,5 +40,27 @@ export async function handlerFetchingLastUpdateSeason({ year = null, season = nu
   } catch (err) {
     console.error(err);
     throw err
+  }
+}
+
+export async function handlerFetchingSuggestedAnime() {
+  const headerSuggestedAnime = new Headers();
+  headerSuggestedAnime.append("Content-Type", "application/json");
+
+  const requestOptions = {
+    method: 'GET',
+    headers: headerSuggestedAnime,
+    redirect: 'follow',
+  };
+
+  try {
+    const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/anime/suggest`, requestOptions);
+    const returnData = await responseFetching.json();
+    if (returnData.status === 'error') return { status: 'error', message: returnData.message };
+    
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 }
