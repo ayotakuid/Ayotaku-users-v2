@@ -56,7 +56,7 @@ function LastUpdatedComponent() {
   }, [setIsDataLastUpdate, isFilterSeason, isFilterYear]);
   return (
     <>
-      <div className="grid grid-cols-12 gap-4 my-10 mx-5 sm:mx-10 md:mx-20 lg:mx-24">
+      <div className="grid grid-cols-12 gap-4 my-10 mx-5 sm:mx-10 md:mx-20 lg:mx-24 p-4">
         <div className="col-span-12">
           <div className="flex items-center justify-center w-full mt-4">
             <div className="flex-grow border-t border-gray-300"></div>
@@ -65,14 +65,35 @@ function LastUpdatedComponent() {
           </div>
 
           <div className="flex items-end justify-end w-full">
-            <Tooltip target=".filter-button" content="Filter" className="text-ayotaku-text-sm px-0 py-1"/>
-            <button
-              className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-lg shadow duration-300 hover:bg-ayotaku-dark filter-button my-1"
-              data-pr-position="top"
-              onClick={() => setIsShowUpFilter(!isShowUpFilter)}
-            >
-              <AdjustmentsHorizontalIcon className='h-5 w-5 flex-none dark:text-white'/>
-            </button>
+            <div className="mx-2">
+              <form className="max-w-md mx-auto">
+                <label 
+                  htmlFor="search-anime" 
+                  className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                >
+                  Search Anime
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                  </div>
+                  <input type="search" className="block w-72 p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Animes..." />
+                </div>
+              </form>
+              
+            </div>
+            <div className="mx-2">
+              <Tooltip target=".filter-button" content="Filter" className="text-ayotaku-text-sm px-0 py-1"/>
+              <button
+                className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-lg shadow duration-300 hover:bg-ayotaku-dark filter-button my-1"
+                data-pr-position="top"
+                onClick={() => setIsShowUpFilter(!isShowUpFilter)}
+              >
+                <AdjustmentsHorizontalIcon className='h-5 w-5 flex-none dark:text-white'/>
+              </button>
+            </div>
           </div>
             <BoxFilterSeasonComponent 
               isShowUpFilter={isShowUpFilter}
