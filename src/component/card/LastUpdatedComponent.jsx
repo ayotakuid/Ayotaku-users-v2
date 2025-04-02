@@ -13,7 +13,7 @@ import { classNames } from "primereact/utils";
 function LastUpdatedComponent() {
   const [isDataLastUpdate, setIsDataLastUpdate] = useState(null);
   const [isShowUpFilter, setIsShowUpFilter] = useState(false);
-  const [isLoadMoreCount, setIsLoadMoreCount] = useState(8);
+  const [isLoadMoreCount, setIsLoadMoreCount] = useState(10);
   const [isLoadingLoadMore, setIsLoadingLoadMore] = useState(false);
   const [isFilterSeason, setIsFilterSeason] = useState([]);
   const [isFilterYear, setIsFilterYear] = useState([]);
@@ -65,7 +65,7 @@ function LastUpdatedComponent() {
           </div>
 
           <div className="flex items-end justify-end w-full">
-            <div className="mx-2">
+            <div className="mx-1 xs:w-full">
               <form className="max-w-md mx-auto">
                 <label 
                   htmlFor="search-anime" 
@@ -79,7 +79,7 @@ function LastUpdatedComponent() {
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                   </div>
-                  <input type="search" className="block w-72 p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Animes..." />
+                  <input type="search" className="block w-full md:w-72 ps-10 px-4 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="search all anime here..." />
                 </div>
               </form>
               
@@ -122,6 +122,7 @@ function LastUpdatedComponent() {
                         e.stopPropagation(); 
                         navigate(`/anime/${item.slug_anime}`)
                       }}
+                      loading="lazy"
                     />
                 </div>
 
