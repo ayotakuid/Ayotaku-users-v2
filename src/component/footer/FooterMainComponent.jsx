@@ -19,7 +19,7 @@ function FooterMainComponent () {
                         <a href="#" className="hover:underline me-4 md:me-6">Contact</a>
                     </li>
                     <li>
-                        <a href="#" className="hover:underline me-4 md:me-6">Website Developer</a>
+                        <a href="#" className="hover:underline me-4 md:me-6">Developer</a>
                     </li>
                 </ul>
             </div>
