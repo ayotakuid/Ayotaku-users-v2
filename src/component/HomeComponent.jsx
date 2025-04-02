@@ -10,6 +10,7 @@ import Cookies from '../utils/handler-cookies';
 // IMPORT COMPONENT
 import NavbarComponent from '../component/head/NavbarComponent';
 import FooterMainComponent from "./footer/FooterMainComponent";
+import ButtonScrollUpComponent from "./utils/ButtonScrollUpComponent";
 
 function HomeComponent({
   isCookiesDefault,
@@ -69,6 +70,7 @@ function HomeComponent({
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow">
           <Outlet />
+          <ButtonScrollUpComponent />
         </main>
         <FooterMainComponent />
       </div>
