@@ -42,6 +42,7 @@ function SuggestedForTodayComponent() {
                 src={items.dataNimes.animes.foto_anime} 
                 alt={items.dataNimes.animes.nama_anime.romanji} 
                 className='w-72 rounded-lg object-cover hover:opacity-50 cursor-pointer duration-300'
+                loading="lazy"
               />
               
               <div className="py-1">

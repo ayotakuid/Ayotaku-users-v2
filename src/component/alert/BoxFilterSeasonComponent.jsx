@@ -35,7 +35,7 @@ function BoxFilterSeasonComponent({ isShowUpFilter, setIsFilterSeason, setIsFilt
   return (
     <div className={classNames(
       isActive ? "block" : "hidden",
-      "grid grid-cols-1 gap-4 p-4 rounded-md bg-ayotaku-super-dark shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-xs",
+      "grid grid-cols-1 gap-4 p-4 mt-2 rounded-md bg-ayotaku-super-dark shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-xs",
     )}>
       <div className="font-bold text-base">Filter Season</div>
       <div className="grid grid-cols-4 sm:grid-cols-12 gap-2 group">
