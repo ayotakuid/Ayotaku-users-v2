@@ -11,6 +11,7 @@ import AyotakuLogo from '../../image/icon-circle.svg';
 import ProfileMenuDropdown from './ProfileMenuDropdown';
 import MenuNotifikasiComponent from './MenuNotifikasiComponent';
 import ProfileImageNavbarComponent from './ProfileImageNavbarComponent';
+import { useProgressBar } from '../utils/ProgressBarProvider';
 
 const navigation = [
   { name: 'Home', href: '/', current: false },
@@ -26,6 +27,7 @@ function NavbarComponent({
   setIsCookiesDefault,
 }) {
   const navigate = useNavigate();
+  const { loadingBarState } = useProgressBar();
 
   // STATE MANAGEMENT
   const [isNavigation, setIsNavigation] = useState(navigation);
@@ -38,7 +40,8 @@ function NavbarComponent({
     const updatedNavigation = isNavigation.map((item) =>
       item.name === name ? { ...item, current: true } : { ...item, current: false }
     );
-    navigate(href);
+  
+    loadingBarState(href);
     setIsNavigation(updatedNavigation);
   };
 

@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 import Tailwind from 'primereact/passthrough/tailwind';
+import { ProgressBarProvider } from './component/utils/ProgressBarProvider.jsx';
 
 // IMPORT FILE STATIC
 import App from './App.jsx';
@@ -14,17 +16,21 @@ import './style/global.css';
 
 // IMPORT ICONS
 import 'primeicons/primeicons.css';
-import { Toaster } from 'sonner';
+import { BrowserRouter } from 'react-router-dom';
         
 ReactDOM.createRoot(
   document.getElementById('root')
 ).render(
   <React.StrictMode>
-    <PrimeReactProvider value={{ pt: Tailwind }}>
-      <HelmetProvider>
-        <App />
-        <Toaster />
-      </HelmetProvider>
-    </PrimeReactProvider>
+    <BrowserRouter>
+      <PrimeReactProvider value={{ pt: Tailwind }}>
+        <ProgressBarProvider>
+          <HelmetProvider>
+            <App />
+            <Toaster />
+          </HelmetProvider>
+        </ProgressBarProvider>
+      </PrimeReactProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )

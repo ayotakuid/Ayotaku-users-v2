@@ -20,6 +20,7 @@ import MainContentComponent from './component/MainContentComponent';
 // HANDLER FETCHING
 import Cookies from './utils/handler-cookies';
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
+import AnimeHomeComponent from './component/AnimeHomeComponent';
 
 // FUNCTION INI SANGAT PENTING!
 // INI UNTUK VALIDASI DULUAN SEBELUM COMPONENT DI RENDER UNTUK MEMERIKSA APAKAH COOKIES SUDAH BENAR ATAU TIDAK!
@@ -109,115 +110,104 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          {/* ROUTE DENGAN MAIN LAYOUT DI HomeComponent */}
-          <Route
-            path='/'
-            element={
-              <HomeComponent
-                isCookiesDefault={isCookiesDefault}
-                setIsCookiesDefault={setIsCookiesDefault}
-                isProfileUser={isProfileUser}
-                setIsProfileUser={setIsProfileUser}
-              />
-            }
-          >
-            <Route
-              index
-              element={<MainContentComponent />}
+      <Routes>
+        {/* ROUTE DENGAN MAIN LAYOUT DI HomeComponent */}
+        <Route
+          path='/'
+          element={
+            <HomeComponent
+              isCookiesDefault={isCookiesDefault}
+              setIsCookiesDefault={setIsCookiesDefault}
+              isProfileUser={isProfileUser}
+              setIsProfileUser={setIsProfileUser}
             />
+          }
+        >
+          <Route
+            index
+            element={<MainContentComponent />}
+          />
 
-            <Route
-              path='anime'
-              element={
-                <>
-                  <Outlet />
-                </>
-              }
-            >
-              <Route 
-                index
-                element={<h1>ini anime</h1>}
-              />
-              
-              <Route 
-                path='detail/id'
-                element={<h1>id id</h1>}
-              />
-            </Route>
-
-            {/* Route yang masih ada di dalam profile */}
-            <Route 
-              path='profile'
-              element={
-                (isCookiesDefault?.isLogin === 'false' 
-                  && isCookiesDefault?.token === 'null') 
-                  ? <Navigate to="/" />
-                  : <ProfileComponent 
-                      isProfileUser={isProfileUser}
-                    />
-              }
-            >
-              <Route 
-                path='me'
-                element={
-                  <AccountComponent 
-                    isProfileUser={isProfileUser}
-                    setIsProfileUser={setIsProfileUser}
-                  />
-                }
-              />
-
-              <Route 
-                path='bookmarks'
-                element={<BookmarksComponent />}
-              />
-              
-              <Route 
-                path='me/password'
-                element={
-                  <ChangePasswordComponent 
-                    isProfileUser={isProfileUser}
-                  />
-                }
-              />
-            </Route>
-
-          </Route>
-          {/* END ROUTE MAIN LAYOUT */}
+          <Route
+            path='anime'
+            element={<AnimeHomeComponent />}
+          />
 
           <Route 
-            path='/register'
+            path='anime/id'
+            element={<h1>id id</h1>}
+          />
+
+          {/* Route yang masih ada di dalam profile */}
+          <Route 
+            path='profile'
+            element={
+              (isCookiesDefault?.isLogin === 'false' 
+                && isCookiesDefault?.token === 'null') 
+                ? <Navigate to="/" />
+                : <ProfileComponent 
+                    isProfileUser={isProfileUser}
+                  />
+            }
+          >
+            <Route 
+              path='me'
+              element={
+                <AccountComponent 
+                  isProfileUser={isProfileUser}
+                  setIsProfileUser={setIsProfileUser}
+                />
+              }
+            />
+
+            <Route 
+              path='bookmarks'
+              element={<BookmarksComponent />}
+            />
+              
+            <Route 
+              path='me/password'
+              element={
+                <ChangePasswordComponent 
+                  isProfileUser={isProfileUser}
+                />
+              }
+            />
+          </Route>
+
+        </Route>
+        {/* END ROUTE MAIN LAYOUT */}
+
+        <Route 
+          path='/register'
             element={
               (isCookiesDefault?.isLogin === 'false' 
                 && isCookiesDefault?.token === 'null') 
                 ? <RegisterComponent /> 
                 : <Navigate to="/" />
-            }
-          />
+          }
+        />
 
-          <Route 
-            path='/login'
+        <Route 
+          path='/login'
             element={
               (isCookiesDefault?.isLogin === 'false'
                 && isCookiesDefault?.token === 'null')
                 ? <LoginComponent />
                 : <Navigate to="/" />
-            }
-          />
+          }
+        />
 
-          <Route 
-            path='/activate'
+        <Route 
+          path='/activate'
             element={
               (isCookiesDefault?.isLogin === 'false' || isCookiesDefault?.token === 'null')
                 ? <ActivatedAccountComponent />
                 : <Navigate to="/" />
-            }
-          />
+          }
+        />
 
-        </Routes>
-      </BrowserRouter>
+      </Routes>
     </>
   )
 }
