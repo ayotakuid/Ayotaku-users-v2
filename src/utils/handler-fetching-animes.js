@@ -64,3 +64,25 @@ export async function handlerFetchingSuggestedAnime() {
     throw err;
   }
 }
+
+export async function handlerFetchingAnimesPagination({ page = 1, limit = 18 }) {
+  const headerAnimesPagination = new Headers();
+  headerAnimesPagination.append("Content-Type", "application/json");
+  
+  const requestOptions = {
+    method: 'GET',
+    headers: headerAnimesPagination,
+    redirect: 'follow',
+  }
+
+  try {
+    const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/anime?page=${page}&limit=${limit}`, requestOptions);
+    const returnData = await responseFetching.json();
+    if (returnData.status === 'error') return { status: 'error', message: returnData.message };
+
+    return returnData;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
