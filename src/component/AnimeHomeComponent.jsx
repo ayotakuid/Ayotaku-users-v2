@@ -3,9 +3,13 @@ import AnimeCardHomeComponent from "./card/AnimeCardHomeComponent";
 import { handlerFetchingAnimesPagination } from "../utils/handler-fetching-animes";
 import { toast } from "sonner";
 import { useSearchParams } from "react-router-dom";
+import { Paginator } from "primereact/paginator";
 
 function AnimeHomeComponent() {
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(18);
   const [isAnimesPagination, setAnimesPagination] = useState([]);
+  const [isPagination, setPagination] = useState(null);
   const [isSearchParams, setSearchParams] = useSearchParams();
 
   const fetchAnimesPagination = async () => {
@@ -20,6 +24,7 @@ function AnimeHomeComponent() {
       }
 
       setAnimesPagination(response?.data);
+      setPagination(response?.pagination);
     } catch (err) {
       console.error(err);
       toast.error('Error Load data Anime!');
@@ -29,6 +34,20 @@ function AnimeHomeComponent() {
   useEffect(() => {
     fetchAnimesPagination();
   }, [setAnimesPagination, isSearchParams]);
+
+  useEffect(() => {
+    const pageFromQuery = isSearchParams.get('page');
+    if (pageFromQuery) {
+      setFirst((pageFromQuery - 1) * rows);
+    }
+  }, [isSearchParams, rows])
+
+  const onPageChange = (event) => {
+    isSearchParams.set('page', event.page + 1);
+    setSearchParams(isSearchParams);
+    setFirst(event.first);
+    setRows(event.rows);
+  }
 
   return (
     <div className="grid grid-cols-1 mx-10 my-5 md:mx-20 md:my-10">
@@ -63,6 +82,15 @@ function AnimeHomeComponent() {
       <div className="grid grid-cols-12 my-3 justify-center gap-2">
         <AnimeCardHomeComponent 
           animes={isAnimesPagination}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 justify-center">
+        <Paginator 
+          first={first}
+          rows={rows}
+          totalRecords={isPagination?.totalData}
+          onPageChange={onPageChange}
         />
       </div>
     </div>
