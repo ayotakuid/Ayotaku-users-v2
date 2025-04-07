@@ -10,6 +10,7 @@ import { Ripple } from "primereact/ripple";
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(18);
+  const [isToggleFilter, setToggleFilter] = useState(false);
   const [isAnimesPagination, setAnimesPagination] = useState([]);
   const [isPagination, setPagination] = useState(null);
   const [isSearchParams, setSearchParams] = useSearchParams();
@@ -62,6 +63,62 @@ function AnimeHomeComponent() {
 
   const templatePaginator = {
     layout: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink', //INI UNTUK MENENTUKAN APA AJA YANG ADA DI DALAM TEMPLATENYA DAN SETIAP TEMPLATE BISA DI GANTI SEPERTI DIBAWAH INI
+    FirstPageLink: (options) => {
+      return (
+        <button type="button" className={classNames(
+          options.className,
+          'hover:bg-ayotaku-normal-dark rounded-md py-5 transition duration-500 mx-0.5 text-ayotaku-text-default min-w-8 h-8 sm:min-w-8 sm:h-8',
+        )} onClick={options.onClick}>
+            <svg className="w-8 h-8 text-ayotaku-text-default" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m17 16-4-4 4-4m-6 8-4-4 4-4"/>
+            </svg>
+
+            <Ripple />
+        </button>
+      )
+    },
+    LastPageLink: (options) => {
+      return (
+        <button type="button" className={classNames(
+          options.className,
+          'hover:bg-ayotaku-normal-dark rounded-md py-5 transition duration-500 mx-0.5 text-ayotaku-text-default min-w-8 h-8 sm:min-w-8 sm:h-8',
+        )} onClick={options.onClick}>
+            <svg className="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
+            </svg>
+
+            <Ripple />
+        </button>
+      )
+    },
+    PrevPageLink: (options) => {
+      return (
+        <button type="button" className={classNames(
+          options.className,
+          'hover:bg-ayotaku-normal-dark rounded-md transition duration-500 mx-0.5 text-ayotaku-text-default min-w-8 h-8 sm:min-w-8 sm:h-8',
+        )} onClick={options.onClick}>
+            <svg className="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 19-7-7 7-7"/>
+            </svg>
+
+            <Ripple />
+        </button>
+      )
+    },
+    NextPageLink: (options) => {
+      return (
+        <button type="button" className={classNames(
+          options.className,
+          'hover:bg-ayotaku-normal-dark rounded-md transition duration-500 mx-0.5 text-ayotaku-text-default min-w-8 h-8 sm:min-w-8 sm:h-8',
+        )} onClick={options.onClick}>
+            <svg className="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m9 5 7 7-7 7"/>
+            </svg>
+
+            <Ripple />
+        </button>
+      )
+    },
     PageLinks: (options) => {
         if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
             const className = classNames(options.className, { 'p-disabled': true });
@@ -78,7 +135,7 @@ function AnimeHomeComponent() {
         return (
             <button type="button" className={classNames(
               options.className,
-              'hover:bg-ayotaku-normal-dark rounded-md transition duration-500 mx-0.5 text-ayotaku-text-default',
+              'hover:bg-ayotaku-normal-dark rounded-md transition duration-500 mx-0.5 text-ayotaku-text-default min-w-8 h-8 sm:min-w-8 sm:h-8',
               {
                 'bg-ayotaku-dark': isActive,
               }
@@ -90,33 +147,79 @@ function AnimeHomeComponent() {
     },
   };
 
+  const toggleFilter = (filterType) => {
+    if (filterType === 'close') {
+      setToggleFilter(false);
+    } else {
+      setToggleFilter(filterType === 'genre');
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 mx-10 my-5 md:mx-20 md:my-10">
       <div className="flex flex-wrap items-center justify-between gap-2 bg-ayotaku-dark rounded-md px-3 py-2 uppercase text-md md:text-lg mb-10">
         {/* Judul */}
-        <span className="text-start w-full sm:w-auto">Kumpulan Semua Anime di Ayotaku!</span>
+        <div>
+          <span className="text-start w-full sm:w-auto mx-2">Kumpulan Semua Anime di Ayotaku!</span>
+        </div>
 
         {/* Search Form */}
-        <form className="flex items-center w-full sm:w-auto">
-          <label htmlFor="search-anime" className="sr-only">Search</label>
-          <div className="relative w-full sm:w-60 md:w-72">
-            {/* Ikon Search */}
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-              </svg>
-            </div>
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 relative">
 
-            {/* Input Search */}
-            <input 
-              type="search" 
-              id="simple-search" 
-              className="bg-ayotaku-super-dark border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
-              placeholder="Search anime..." 
-              required 
-            />
+          <div className="flex flex-nowrap">
+            <form className="flex items-center w-full sm:w-auto">
+              <label htmlFor="search-anime" className="sr-only">Search</label>
+              <div className="relative w-full sm:w-60 md:w-72">
+                {/* Ikon Search */}
+                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+                </div>
+
+                {/* Input Search */}
+                <input 
+                  type="search" 
+                  id="simple-search" 
+                  className="bg-ayotaku-super-dark border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
+                  placeholder="Search anime..." 
+                  required 
+                />
+              </div>
+            </form>
+
+            <button 
+              type="button" 
+              className="text-white bg-ayotaku-super-dark font-medium rounded-lg text-sm text-center px-3 py-2 inline-flex items-center me-2 hover:bg-ayotaku-normal-dark duration-500 mx-2 my-2 transition-transform active:scale-50 cursor-pointer"
+              onClick={() => toggleFilter('genre')}
+            >
+            <svg className="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
+            </svg>
+
+              <span className="sr-only">Filter</span>
+            </button>
           </div>
-        </form>
+
+          <div 
+            className={
+              classNames(
+                isToggleFilter ? "translate-y-0 opacity-100 pointer-events-auto" : "translate-y-5 opacity-0 pointer-events-none",
+                "absolute text-ayotaku-text-sm top-full right-2 mt-2 bg-ayotaku-super-dark border border-gray-700 text-white py-2 px-3 rounded-lg shadow-lg w-64 z-50 normal-case overflow-y-auto transition-all duration-300"
+              )
+            }
+          >
+            <div className="flex flex-wrap justify-between">
+              <span className="text-start">Filter Genres</span>
+              <span 
+                className="text-end"
+                onClick={() => toggleFilter('close')}
+              >
+                <i className="pi pi-times rounded-full duration-300 p-1.5 hover:bg-adultdesu-navbartext cursor-pointer active:scale-75"></i>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
 
