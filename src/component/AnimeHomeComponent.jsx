@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import AnimeCardHomeComponent from "./card/AnimeCardHomeComponent";
 import { handlerFetchingAnimesPagination } from "../utils/handler-fetching-animes";
 import { toast } from "sonner";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Paginator } from "primereact/paginator";
+import { classNames } from "primereact/utils";
+import { Ripple } from "primereact/ripple";
 
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
@@ -11,6 +13,8 @@ function AnimeHomeComponent() {
   const [isAnimesPagination, setAnimesPagination] = useState([]);
   const [isPagination, setPagination] = useState(null);
   const [isSearchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
 
   const fetchAnimesPagination = async () => {
     try {
@@ -20,6 +24,9 @@ function AnimeHomeComponent() {
 
       if (response?.data.length === 0) {
         toast.error('Data Anime Kosong!');
+        setTimeout(() => {
+          navigate('/anime?page=1');
+        }, 500);
         return;
       }
 
@@ -47,7 +54,41 @@ function AnimeHomeComponent() {
     setSearchParams(isSearchParams);
     setFirst(event.first);
     setRows(event.rows);
+
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 300)
   }
+
+  const templatePaginator = {
+    layout: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink', //INI UNTUK MENENTUKAN APA AJA YANG ADA DI DALAM TEMPLATENYA DAN SETIAP TEMPLATE BISA DI GANTI SEPERTI DIBAWAH INI
+    PageLinks: (options) => {
+        if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+            const className = classNames(options.className, { 'p-disabled': true });
+
+            return (
+                <span className={className} style={{ userSelect: 'none' }}>
+                    ...
+                </span>
+            );
+        }
+
+        const isActive = options.page === options.currentPage;
+
+        return (
+            <button type="button" className={classNames(
+              options.className,
+              'hover:bg-ayotaku-normal-dark rounded-md transition duration-500 mx-0.5 text-ayotaku-text-default',
+              {
+                'bg-ayotaku-dark': isActive,
+              }
+            )} onClick={options.onClick}>
+                {options.page + 1}
+                <Ripple />
+            </button>
+        );
+    },
+  };
 
   return (
     <div className="grid grid-cols-1 mx-10 my-5 md:mx-20 md:my-10">
@@ -79,7 +120,7 @@ function AnimeHomeComponent() {
       </div>
 
 
-      <div className="grid grid-cols-12 my-3 justify-center gap-2">
+      <div className="grid grid-cols-12 my-3 justify-center gap-4">
         <AnimeCardHomeComponent 
           animes={isAnimesPagination}
         />
@@ -87,6 +128,7 @@ function AnimeHomeComponent() {
 
       <div className="grid grid-cols-1 justify-center">
         <Paginator 
+          template={templatePaginator}
           first={first}
           rows={rows}
           totalRecords={isPagination?.totalData}
