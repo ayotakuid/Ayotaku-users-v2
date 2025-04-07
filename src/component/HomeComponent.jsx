@@ -67,13 +67,13 @@ function HomeComponent({
         </span>
       </div>
 
-      <div className="flex flex-col min-h-screen">
+      <div className="container flex flex-col min-h-screen">
         <main className="flex-grow">
           <Outlet />
           <ButtonScrollUpComponent />
         </main>
-        <FooterMainComponent />
       </div>
+      <FooterMainComponent />
 
     </>
   )

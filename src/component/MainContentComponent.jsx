@@ -60,7 +60,7 @@ function MainContentComponent() {
       <div className="min-h-screen flex flex-col">
       {/* Section with Background (Recommended Anime + Swiper) */}
       <div 
-        className="relative w-full"
+        className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
         style={{ backgroundImage: `url(${BackgroundParticle})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         <div className="grid grid-cols-12 gap-4 mb-5">
