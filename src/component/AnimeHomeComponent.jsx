@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import AnimeCardHomeComponent from "./card/AnimeCardHomeComponent";
 import { handlerFetchingAnimesPagination } from "../utils/handler-fetching-animes";
+import { listGenre } from '../utils/handler-tools';
 import { toast } from "sonner";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Paginator } from "primereact/paginator";
 import { classNames } from "primereact/utils";
 import { Ripple } from "primereact/ripple";
+import { Tooltip } from "primereact/tooltip";
+import { MultiSelect } from "primereact/multiselect";
+import { Tailwind, TRANSITIONS } from '../utils/handler-theming-multiselect';
 
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
@@ -14,6 +18,8 @@ function AnimeHomeComponent() {
   const [isAnimesPagination, setAnimesPagination] = useState([]);
   const [isPagination, setPagination] = useState(null);
   const [isSearchParams, setSearchParams] = useSearchParams();
+  const [selectedValueGenres, setSelectedValueGenres] = useState(null);
+  const [isValueGenres] = useState(listGenre());
 
   const navigate = useNavigate();
 
@@ -188,35 +194,59 @@ function AnimeHomeComponent() {
               </div>
             </form>
 
-            <button 
-              type="button" 
-              className="text-white bg-ayotaku-super-dark font-medium rounded-lg text-sm text-center px-3 py-2 inline-flex items-center me-2 hover:bg-ayotaku-normal-dark duration-500 mx-2 my-2 transition-transform active:scale-50 cursor-pointer"
-              onClick={() => toggleFilter('genre')}
-            >
-            <svg className="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
-            </svg>
+            <div>
+              <Tooltip target=".filter-button" content="Filter & Sort" className="text-ayotaku-text-sm px-0 py-1" />
+              <button 
+                type="button" 
+                className="text-white bg-ayotaku-super-dark font-medium rounded-lg text-sm text-center px-3 py-2 inline-flex items-center me-2 hover:bg-ayotaku-normal-dark duration-500 mx-2 my-2 transition-all active:scale-50 cursor-pointer filter-button"
+                data-pr-position="top"
+                onClick={() => toggleFilter('genre')}
+              >
+              <svg className="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
+              </svg>
 
-              <span className="sr-only">Filter</span>
-            </button>
+                <span className="sr-only">Filter & Sort</span>
+              </button>
+            </div>
           </div>
 
           <div 
             className={
               classNames(
                 isToggleFilter ? "translate-y-0 opacity-100 pointer-events-auto" : "translate-y-5 opacity-0 pointer-events-none",
-                "absolute text-ayotaku-text-sm top-full right-2 mt-2 bg-ayotaku-super-dark border border-gray-700 text-white py-2 px-3 rounded-lg shadow-lg w-64 z-50 normal-case overflow-y-auto transition-all duration-300"
+                "absolute text-ayotaku-text-sm top-full right-2 mt-2 bg-ayotaku-super-dark border border-gray-700 text-white py-2 px-3 rounded-lg shadow-lg min-w-full z-50 normal-case overflow-y-auto transition-all duration-300"
               )
             }
           >
             <div className="flex flex-wrap justify-between">
-              <span className="text-start">Filter Genres</span>
+              <span className="text-start text-lg">Filter & Sort</span>
               <span 
                 className="text-end"
                 onClick={() => toggleFilter('close')}
               >
                 <i className="pi pi-times rounded-full duration-300 p-1.5 hover:bg-adultdesu-navbartext cursor-pointer active:scale-75"></i>
               </span>
+            </div>
+
+            <div className="grid grid-cols-12 my-2">
+              <div className="col-span-12">
+                <span className="text-base text-ayotaku-text-default">Genres</span>
+                <div className="card flex justify-center">
+                  <MultiSelect 
+                    value={selectedValueGenres} 
+                    onChange={(e) => setSelectedValueGenres(e.value)} 
+                    options={isValueGenres} 
+                    optionLabel="name" 
+                    filter 
+                    placeholder="Select Genres" 
+                    maxSelectedLabels={5} 
+                    className="w-full md:w-20rem text-ayotaku-text-sm p-0"
+                    display="chip"
+                    pt={Tailwind.multiselect}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
