@@ -180,7 +180,7 @@ function LastUpdatedComponent() {
                       <div className="text-sm text-gray-400">Episode Coming Soon</div>
                     ) : (
                       <div className="flex flex-col gap-1 text-sm text-gray-200">
-                        {item.detail_eps.slice(0, 4).map((episode) => (
+                        {item.detail_eps.slice(0, 3).map((episode) => (
                           <div
                             key={episode.id}
                             className="flex justify-between items-center hover:underline cursor-pointer"
@@ -194,7 +194,7 @@ function LastUpdatedComponent() {
                         ))}
                         {item.detail_eps.length > 3 && (
                           <span className="text-ayotaku-text-xs text-gray-400">
-                            +{item.detail_eps.length - 4} episode lainnya
+                            +{item.detail_eps.length - 3} episode lainnya
                           </span>
                         )}
                       </div>
