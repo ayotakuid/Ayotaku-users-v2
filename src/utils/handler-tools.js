@@ -80,3 +80,24 @@ export function listGenre() {
     { mal_id: 27, name: "Shounen" }
   ];
 }
+
+export function listSortBy() {
+  return [
+    {
+      id: 1,
+      name: 'Title: A-Z',
+    },
+    {
+      id: 2,
+      name: 'Title: Z-A',
+    },
+    {
+      id: 3,
+      name: 'Date: Terbaru',
+    },
+    {
+      id: 4,
+      name: 'Date: Terlama',
+    }
+  ];
+}
