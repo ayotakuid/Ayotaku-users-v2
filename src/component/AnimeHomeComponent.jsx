@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AnimeCardHomeComponent from "./card/AnimeCardHomeComponent";
 import { handlerFetchingAnimesPagination } from "../utils/handler-fetching-animes";
-import { listGenre } from '../utils/handler-tools';
+import { listGenre, listSortBy } from '../utils/handler-tools';
 import { toast } from "sonner";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Paginator } from "primereact/paginator";
@@ -10,6 +10,8 @@ import { Ripple } from "primereact/ripple";
 import { Tooltip } from "primereact/tooltip";
 import { MultiSelect } from "primereact/multiselect";
 import { Tailwind, TRANSITIONS } from '../utils/handler-theming-multiselect';
+import { TailwindDropdown} from '../utils/handler-theming-dropdown';
+import { Dropdown } from "primereact/dropdown";
 
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
@@ -19,7 +21,9 @@ function AnimeHomeComponent() {
   const [isPagination, setPagination] = useState(null);
   const [isSearchParams, setSearchParams] = useSearchParams();
   const [selectedValueGenres, setSelectedValueGenres] = useState(null);
+  const [selectedValueSort, setSelectedValueSort] = useState(null);
   const [isValueGenres] = useState(listGenre());
+  const [isValueSort] = useState(listSortBy());
 
   const navigate = useNavigate();
 
@@ -219,7 +223,7 @@ function AnimeHomeComponent() {
               )
             }
           >
-            <div className="flex flex-wrap justify-between">
+            <div className="flex flex-wrap justify-between my-2">
               <span className="text-start text-lg">Filter & Sort</span>
               <span 
                 className="text-end"
@@ -229,9 +233,9 @@ function AnimeHomeComponent() {
               </span>
             </div>
 
-            <div className="grid grid-cols-12 my-2">
+            <div className="grid grid-cols-12 mt-5 mb-2">
               <div className="col-span-12">
-                <span className="text-base text-ayotaku-text-default">Genres</span>
+                <span className="text-base text-ayotaku-text-default px-1">Genres</span>
                 <div className="card flex justify-center">
                   <MultiSelect 
                     value={selectedValueGenres} 
@@ -248,6 +252,41 @@ function AnimeHomeComponent() {
                 </div>
               </div>
             </div>
+
+            <div className="grid grid-cols-12 mt-5 mb-2">
+              <div className="col-span-12">
+                <span className="text-base text-ayotaku-text-default px-1">Sort by</span>
+                <div className="card flex justify-start w-full">
+                  <Dropdown 
+                    value={selectedValueSort}
+                    onChange={(e) => setSelectedValueSort(e.value)}
+                    options={isValueSort}
+                    optionLabel="name"
+                    placeholder="Select Sorting"
+                    checkmark={true}
+                    highlightOnSelect={false}
+                    showClear
+                    pt={TailwindDropdown.dropdown}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-12 mt-5 mb-2">
+              <div className="col-span-12 flex gap-2">
+                <button 
+                  className="bg-ayotaku-dark hover:bg-ayotaku-box duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm"
+                >
+                  Apply Filter
+                </button>
+                <button 
+                  className="hover:underline duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm"
+                >
+                  Clear Filter
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
