@@ -15,16 +15,20 @@ export const TRANSITIONS = {
 export const Tailwind = {
   multiselect: {
       root: ({ props }) => ({
-          className: classNames('inline-flex cursor-pointer select-none', 'bg-gray-900 border border-gray-400 dark:border-blue-900/40  transition-colors duration-200 ease-in-out rounded-md', 'w-full md:w-80', {
+          className: classNames('inline-flex cursor-pointer select-none', 'bg-gray-900 border border-gray-400 dark:border-blue-900/40 transition-colors duration-200 ease-in-out rounded-md', 'w-full md:w-80', {
               'opacity-60 select-none pointer-events-none cursor-default': props.disabled
           })
       }),
       labelContainer: 'overflow-hidden flex flex-auto cursor-pointer',
       label: ({ props }) => ({
-          className: classNames('block overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis', 'text-gray-800 dark:text-white/80', 'transition duration-200', {
+          className: classNames(
+            'block overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis', 
+            'text-gray-800 dark:text-white/80', 'transition duration-200 !py-2', 
+            {
               '!p-1': props.display !== 'chip' && (props.value == null || props.value == undefined),
               '!py-1.5 px-3': props.display === 'chip' && props.value !== null
-          })
+            }
+          )
       }),
       token: {
           className: classNames('py-1 px-2 mr-2 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white/80 rounded-full', 'cursor-default inline-flex items-center')
@@ -37,7 +41,7 @@ export const Tailwind = {
           className: classNames('bg-white dark:bg-gray-900 text-gray-700 dark:text-white/80 border-0 rounded-md shadow-lg')
       },
       header: {
-          className: classNames('p-3 border-b border-gray-300 dark:border-blue-900/40 text-gray-700 dark:text-white/80 bg-gray-100 dark:bg-gray-800 rounded-t-lg', 'flex items-center justify-between')
+          className: classNames('p-1 border-b border-gray-300 dark:border-blue-900/40 text-gray-700 dark:text-white/80 bg-gray-100 dark:bg-gray-800 rounded-t-lg', 'flex items-center justify-between')
       },
       headerCheckboxContainer: {
           className: classNames('inline-flex cursor-pointer select-none align-bottom relative', 'mr-2', 'w-6 h-6')
@@ -79,7 +83,7 @@ export const Tailwind = {
       wrapper: {
           className: classNames('max-h-[200px] overflow-auto', 'bg-white text-gray-700 border-0 rounded-md shadow-lg', 'dark:ayotaku-super-dark dark:text-white/80')
       },
-      list: 'py-3 list-none m-0',
+      list: 'py-2 list-none m-0',
       item: ({ context }) => ({
           className: classNames('cursor-pointer font-normal text-ayotaku-text-sm overflow-hidden relative whitespace-nowrap', 'm-0 p-1 border-0  transition-shadow duration-200 rounded-none', {
               'bg-gray-300 text-gray-700 dark:text-white/80 dark:bg-gray-800/90 hover:text-gray-700 hover:bg-gray-200 dark:text-white/80': !context.focused && !context.selected,
