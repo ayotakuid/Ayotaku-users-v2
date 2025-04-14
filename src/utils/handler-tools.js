@@ -86,18 +86,22 @@ export function listSortBy() {
     {
       id: 1,
       name: 'Title: A-Z',
+      value: 'a-z',
     },
     {
       id: 2,
       name: 'Title: Z-A',
+      value: 'z-a'
     },
     {
       id: 3,
       name: 'Date: Terbaru',
+      value: 'newest',
     },
     {
       id: 4,
       name: 'Date: Terlama',
+      value: 'oldest',
     }
   ];
 }
