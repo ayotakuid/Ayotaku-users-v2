@@ -65,7 +65,7 @@ export async function handlerFetchingSuggestedAnime() {
   }
 }
 
-export async function handlerFetchingAnimesPagination({ page = 1, limit = 18 }) {
+export async function handlerFetchingAnimesPagination({ page = 1, limit = 18, sort = {}, genres = [], search = '' }) {
   const headerAnimesPagination = new Headers();
   headerAnimesPagination.append("Content-Type", "application/json");
   
@@ -76,7 +76,7 @@ export async function handlerFetchingAnimesPagination({ page = 1, limit = 18 }) 
   }
 
   try {
-    const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/anime?page=${page}&limit=${limit}`, requestOptions);
+    const responseFetching = await fetch(`${URL_API_AYOTAKU}/user/api/anime?page=${page}&limit=${limit}&sort=${sort}&genres=${genres}&search=${search}`, requestOptions);
     const returnData = await responseFetching.json();
     if (returnData.status === 'error') return { status: 'error', message: returnData.message };
 
