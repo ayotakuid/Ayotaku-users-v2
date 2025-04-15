@@ -13,6 +13,7 @@ import { Tailwind, TRANSITIONS } from '../utils/handler-theming-multiselect';
 import { TailwindDropdown} from '../utils/handler-theming-dropdown';
 import { templatePaginator } from '../utils/handler-template-paginator';
 import { Dropdown } from "primereact/dropdown";
+import WarningIconComponent from "./utils/WarningIconComponent";
 
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
@@ -23,6 +24,9 @@ function AnimeHomeComponent() {
   const [isSearchParams, setSearchParams] = useSearchParams();
   const [selectedValueGenres, setSelectedValueGenres] = useState(null);
   const [selectedValueSort, setSelectedValueSort] = useState(null);
+  const [isValueSearch, setValueSearch] = useState({
+    search: ''
+  });
   const [isValueGenres] = useState(listGenre());
   const [isValueSort] = useState(listSortBy());
 
@@ -31,24 +35,38 @@ function AnimeHomeComponent() {
   const fetchAnimesPagination = async () => {
     try {
       const page = isSearchParams.get('page') ?? 1;
+      const sort = isSearchParams.get('sort') || null;
+      const genresRaw = isSearchParams.get('genres') || '';
+      const genres = genresRaw ? genresRaw.split(',') : [];
+      const search = isSearchParams.get('search') || '';
+  
       const limit = 18;
-      const response = await handlerFetchingAnimesPagination({ page: page, limit: limit });
-
+      const response = await handlerFetchingAnimesPagination({ page, limit, sort, genres, search });
+  
       if (response?.data.length === 0) {
-        toast.error('Data Anime Kosong!');
+        toast.success('Anime yang dicari tidak ada!', {
+          duration: 3000,
+          icon: <WarningIconComponent />,
+          position: 'bottom-right',
+        });
+
         setTimeout(() => {
+          setSelectedValueGenres(null);
+          setSelectedValueSort(null);
+          setValueSearch((prev) => ({ search: '' }));
           navigate('/anime?page=1');
         }, 500);
         return;
       }
-
+  
       setAnimesPagination(response?.data);
       setPagination(response?.pagination);
     } catch (err) {
       console.error(err);
       toast.error('Error Load data Anime!');
     }
-  }
+  };
+  
 
   useEffect(() => {
     fetchAnimesPagination();
@@ -56,8 +74,19 @@ function AnimeHomeComponent() {
 
   useEffect(() => {
     const pageFromQuery = isSearchParams.get('page');
+    const sortFromQuery = isSearchParams.get('sort');
+    const genresFromQuery = isSearchParams.get('genres');
+
     if (pageFromQuery) {
       setFirst((pageFromQuery - 1) * rows);
+    }
+
+    if (sortFromQuery) {
+      setSelectedValueSort(sortFromQuery);
+    }
+
+    if (genresFromQuery) {
+      setSelectedValueGenres(genresFromQuery.split(',').map((text) => text.charAt(0).toUpperCase() + text.slice(1)));
     }
   }, [isSearchParams, rows])
 
@@ -81,8 +110,71 @@ function AnimeHomeComponent() {
   }
   
   const onClickApplyFilter = () => {
-    const finalGenres = selectedValueGenres.map((name) => name.toLowerCase());
-    console.log(finalGenres);    
+    const params = new URLSearchParams(isSearchParams);
+    params.set('page', '1'); // reset ke halaman 1 saat filter berubah
+  
+    if (selectedValueSort) {
+      const value = selectedValueSort.toString().toLowerCase();
+      params.set('sort', value);
+    } else {
+      params.delete('sort');
+    }
+  
+    if (selectedValueGenres && selectedValueGenres.length > 0) {
+      const value = selectedValueGenres.map((g) => g.toLowerCase()).join(',');
+      params.set('genres', value);
+    } else {
+      params.delete('genres');
+    }
+  
+    setSearchParams(params); // ini akan trigger useEffect
+  };
+
+  const oncClickClearFilter = () => {
+    setSelectedValueGenres(null)
+    setSelectedValueSort(null);
+
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set('page', '1');
+      newParams.delete('genres');
+      newParams.delete('sort');
+
+      return newParams;
+    });
+  }
+
+  const onSubmitSearchAnime = (e) => {
+    e.preventDefault();
+    const newParams = new URLSearchParams(isSearchParams);
+    newParams.set('page', '1');
+  
+    if (isValueSearch.search.length === 0) {
+      toast.error('Harus lebih dari 3 Karakter/Huruf');
+      newParams.delete('search');
+      setSearchParams(newParams);
+      return;
+    }
+  
+    if (isValueSearch.search.length < 3) {
+      toast.warning('Harus lebih dari 3 Karakter/Huruf');
+      return;
+    }
+  
+    newParams.set('search', isValueSearch.search.toLowerCase());
+    setSearchParams(newParams);
+  };
+  
+
+  const onChangeSearchAnime = (e) => {
+    const { name, value } = e.target;
+
+    setValueSearch((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    return
   }
 
   return (
@@ -97,7 +189,10 @@ function AnimeHomeComponent() {
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 relative">
 
           <div className="flex flex-nowrap">
-            <form className="flex items-center w-full sm:w-auto">
+            <form 
+              className="flex items-center w-full sm:w-auto"
+              onSubmit={onSubmitSearchAnime}
+            >
               <label htmlFor="search-anime" className="sr-only">Search</label>
               <div className="relative w-full sm:w-60 md:w-72">
                 {/* Ikon Search */}
@@ -111,9 +206,11 @@ function AnimeHomeComponent() {
                 <input 
                   type="search" 
                   id="simple-search" 
+                  name="search"
+                  value={isValueSearch.search}
                   className="bg-ayotaku-super-dark border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
                   placeholder="Search anime..." 
-                  required 
+                  onChange={onChangeSearchAnime}
                 />
               </div>
             </form>
@@ -198,14 +295,15 @@ function AnimeHomeComponent() {
               <div className="col-span-12 flex gap-2">
                 <button 
                   type="button"
-                  className="bg-ayotaku-dark hover:bg-ayotaku-box duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm"
+                  className="bg-ayotaku-dark hover:bg-ayotaku-box duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm active:scale-50 cursor-pointer"
                   onClick={onClickApplyFilter}
                 >
                   Apply Filter
                 </button>
                 <button 
                   type="button"
-                  className="hover:underline duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm"
+                  className="hover:underline duration-500 transition-all px-2 py-1 rounded-md text-ayotaku-text-sm active:scale-50 cursor-pointer"
+                  onClick={oncClickClearFilter}
                 >
                   Clear Filter
                 </button>
