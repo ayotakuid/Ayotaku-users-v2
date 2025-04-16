@@ -75,89 +75,89 @@ function MainContentComponent() {
           <div className="col-span-12">
             <div className="flex w-full h-52 xs:h-48 md:h-80 lg:h-80">
             <Swiper
-                loop={isSwiper?.length >= 5}
-                spaceBetween={10}
-                centeredSlides={true}
-                grabCursor={true}
-                autoplay={{
-                  delay: 3500,
-                  disableOnInteraction: false,
-                }}
-                modules={[Autoplay]}
-                breakpoints={{
-                  0: {
-                    slidesPerView: 1.2,
-                  },
-                  640: {
-                    slidesPerView: 1.5,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                  },
-                  1024: {
-                    slidesPerView: 3.5,
-                  },
-                  1280: {
-                    slidesPerView: 4,
-                  },
-                  1536: {
-                    slidesPerView: 5.2
-                  }
-                }}
-                onSlideChange={(swiper) => 
-                  setIsActiveSwiper(swiper.realIndex)
+              loop={isSwiper?.length >= 5}
+              spaceBetween={10}
+              centeredSlides={true}
+              grabCursor={true}
+              autoplay={{
+                delay: 3500,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay]}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1.2,
+                },
+                640: {
+                  slidesPerView: 1.5,
+                },
+                768: {
+                  slidesPerView: 3,
+                },
+                1024: {
+                  slidesPerView: 3.5,
+                },
+                1280: {
+                  slidesPerView: 4,
+                },
+                1536: {
+                  slidesPerView: 5.2
                 }
-              >
-                {
-                  isDataRecommend?.map((item, index) => (
-                    <SwiperSlide 
-                      key={item.id} 
-                      className="relative flex justify-center items-center select-none"
+              }}
+              onSlideChange={(swiper) => 
+                setIsActiveSwiper(swiper.realIndex)
+              }
+            >
+              {
+                isDataRecommend?.map((item, index) => (
+                  <SwiperSlide 
+                    key={item.id} 
+                    className="relative flex justify-center items-center select-none"
+                  >
+                    <div 
+                      className='w-full h-full object-cover rounded-2xl hover:cursor-pointer'
+                      onClick={() => navigate(`anime/${item.id}`)}
                     >
-                      <div 
-                        className='w-full h-full object-cover rounded-2xl hover:cursor-pointer'
-                        onClick={() => navigate(`anime/${item.id}`)}
-                      >
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className={classNames(
-                            'w-full h-full object-cover rounded-2xl',
-                            // Tambahkan kelas khusus untuk slide di kiri dan kanan dua slide dari slide aktif
-                            isActiveSwiper === index
-                              ? 'bg-opacity-100' // Slide aktif
-                              : (
-                                  index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length ||
-                                  index === (isActiveSwiper + 2) % isSwiper?.length
-                                )
-                                ? 'opacity-40' // Dua slide kiri atau kanan dari yang aktif
-                                : 'opacity-65' // Slide lain yang lebih jauh
-                          )}
-                          referrerPolicy='no-referrer'
-                        />
-                        <div className={classNames(
-                          // Perbaikan logika pengecekan slide aktif
-                          isActiveSwiper === index ? 'bg-opacity-10' : 'bg-opacity-50',
-                          'absolute bottom-0 left-0 w-full h-full bg-black duration-500 text-white text-center py-2 rounded-2xl',
-                          (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'bg-opacity-70' : '',
-                          (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'bg-opacity-80' : '',
-                        )}>
-                        </div>
-                        <div className={classNames(
-                          'absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-2 rounded-b-lg',
-                          (index === (isActiveSwiper - 1 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 1) % isSwiper?.length) ? 'text-opacity-50' : '',
-                          (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'text-opacity-20' : '',
-                          (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'text-opacity-10' : '',
-                        )}>
-                          <span className='block w-full truncate whitespace-nowrap text-sm px-5'>
-                            {item.title}
-                          </span>
-                        </div>
+                      <img
+                        src={item.img}
+                        alt={item.title}
+                        className={classNames(
+                          'w-full h-full object-cover rounded-2xl',
+                          // Tambahkan kelas khusus untuk slide di kiri dan kanan dua slide dari slide aktif
+                          isActiveSwiper === index
+                            ? 'bg-opacity-100' // Slide aktif
+                            : (
+                                index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length ||
+                                index === (isActiveSwiper + 2) % isSwiper?.length
+                              )
+                              ? 'opacity-40' // Dua slide kiri atau kanan dari yang aktif
+                              : 'opacity-65' // Slide lain yang lebih jauh
+                        )}
+                        referrerPolicy='no-referrer'
+                      />
+                      <div className={classNames(
+                        // Perbaikan logika pengecekan slide aktif
+                        isActiveSwiper === index ? 'bg-opacity-10' : 'bg-opacity-50',
+                        'absolute bottom-0 left-0 w-full h-full bg-black duration-500 text-white text-center py-2 rounded-2xl',
+                        (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'bg-opacity-70' : '',
+                        (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'bg-opacity-80' : '',
+                      )}>
                       </div>
-                    </SwiperSlide>
-                  ))
-                }
-              </Swiper>
+                      <div className={classNames(
+                        'absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center py-2 rounded-b-lg',
+                        (index === (isActiveSwiper - 1 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 1) % isSwiper?.length) ? 'text-opacity-50' : '',
+                        (index === (isActiveSwiper - 2 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 2) % isSwiper?.length) ? 'text-opacity-20' : '',
+                        (index === (isActiveSwiper - 3 + isSwiper?.length) % isSwiper?.length || index === (isActiveSwiper + 3) % isSwiper?.length) ? 'text-opacity-10' : '',
+                      )}>
+                        <span className='block w-full truncate whitespace-nowrap text-sm px-5'>
+                          {item.title}
+                        </span>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))
+              }
+            </Swiper>
             </div>
           </div>
         </div>
