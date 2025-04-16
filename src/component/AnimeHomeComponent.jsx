@@ -14,6 +14,11 @@ import { TailwindDropdown} from '../utils/handler-theming-dropdown';
 import { templatePaginator } from '../utils/handler-template-paginator';
 import { Dropdown } from "primereact/dropdown";
 import WarningIconComponent from "./utils/WarningIconComponent";
+import ChipsFilterComponent from "./utils/ChipsFilterComponent";
+import MainChipsGenresComponent from "./badge/MainChipsGenresComponent";
+import MainChipsSortComponent from "./badge/MainChipsSortComponent";
+import MainChipsSearchComponent from "./badge/MainChipsSearchComponent";
+import { useSearch } from "./utils/SearchProvider";
 
 function AnimeHomeComponent() {
   const [first, setFirst] = useState(0);
@@ -24,9 +29,7 @@ function AnimeHomeComponent() {
   const [isSearchParams, setSearchParams] = useSearchParams();
   const [selectedValueGenres, setSelectedValueGenres] = useState(null);
   const [selectedValueSort, setSelectedValueSort] = useState(null);
-  const [isValueSearch, setValueSearch] = useState({
-    search: ''
-  });
+  const { isValueSearch, setValueSearch } = useSearch();
   const [isValueGenres] = useState(listGenre());
   const [isValueSort] = useState(listSortBy());
 
@@ -133,12 +136,14 @@ function AnimeHomeComponent() {
   const oncClickClearFilter = () => {
     setSelectedValueGenres(null)
     setSelectedValueSort(null);
+    setValueSearch((prev) => ({ search: '' }));
 
     setSearchParams((prev) => {
       const newParams = new URLSearchParams(prev);
       newParams.set('page', '1');
       newParams.delete('genres');
       newParams.delete('sort');
+      newParams.delete('search');
 
       return newParams;
     });
@@ -314,6 +319,13 @@ function AnimeHomeComponent() {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 ">
+        <div className="flex flex-wrap gap-2 mb-2">
+          <MainChipsGenresComponent genres={isSearchParams.get('genres')?.split(',')} />
+          <MainChipsSortComponent sort={isSearchParams.get('sort')} />
+          <MainChipsSearchComponent search={isSearchParams.get('search')} setSearchParams={setSearchParams} />
+        </div>
+      </div>
 
       <div className="grid grid-cols-12 my-3 justify-center gap-4">
         <AnimeCardHomeComponent 
