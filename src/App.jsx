@@ -21,6 +21,7 @@ import MainContentComponent from './component/MainContentComponent';
 import Cookies from './utils/handler-cookies';
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
 import AnimeHomeComponent from './component/AnimeHomeComponent';
+import GenreHomeComponent from './component/GenresHomeComponent';
 
 // FUNCTION INI SANGAT PENTING!
 // INI UNTUK VALIDASI DULUAN SEBELUM COMPONENT DI RENDER UNTUK MEMERIKSA APAKAH COOKIES SUDAH BENAR ATAU TIDAK!
@@ -131,6 +132,11 @@ function App() {
           <Route
             path='anime'
             element={<AnimeHomeComponent />}
+          />
+
+          <Route 
+            path='genres'
+            element={<GenreHomeComponent />}
           />
 
           <Route 

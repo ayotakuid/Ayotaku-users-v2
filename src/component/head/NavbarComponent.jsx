@@ -16,7 +16,7 @@ import { useProgressBar } from '../utils/ProgressBarProvider';
 const navigation = [
   { name: 'Home', href: '/', current: false },
   { name: 'Anime', href: '/anime', current: false },
-  { name: 'Genres', href: '/#', current: false },
+  { name: 'Genres', href: '/genres', current: false },
 ];
 
 function NavbarComponent({
