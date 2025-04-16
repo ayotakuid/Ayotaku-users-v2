@@ -23,7 +23,7 @@ export const Tailwind = {
       label: ({ props }) => ({
           className: classNames(
             'block overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis', 
-            'text-gray-800 dark:text-white/80', 'transition duration-200 !py-2', 
+            'text-gray-800 dark:text-white/80', 'transition duration-200 !py-1.5', 
             {
               '!p-1': props.display !== 'chip' && (props.value == null || props.value == undefined),
               '!py-1.5 px-3': props.display === 'chip' && props.value !== null

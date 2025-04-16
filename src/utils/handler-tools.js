@@ -105,3 +105,17 @@ export function listSortBy() {
     }
   ];
 }
+
+export function checkingSortBy (sort) {
+  switch (sort) {
+    case 'a-z':
+      return 'Title: A-Z';
+    case 'z-a':
+      return 'Title: Z-A';
+    case 'newest':
+      return 'Date: Terbaru';
+    case 'oldest':
+      return 'Date: Terlama';
+    default:
+  }
+}
