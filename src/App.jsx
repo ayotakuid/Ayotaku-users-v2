@@ -22,6 +22,7 @@ import Cookies from './utils/handler-cookies';
 import { handlerFetchingProfileUser } from './utils/handler-fetching';
 import AnimeHomeComponent from './component/AnimeHomeComponent';
 import GenreHomeComponent from './component/GenresHomeComponent';
+import DetailAnimeComponent from './component/DetailAnimeComponent';
 
 // FUNCTION INI SANGAT PENTING!
 // INI UNTUK VALIDASI DULUAN SEBELUM COMPONENT DI RENDER UNTUK MEMERIKSA APAKAH COOKIES SUDAH BENAR ATAU TIDAK!
@@ -140,8 +141,8 @@ function App() {
           />
 
           <Route 
-            path='anime/id'
-            element={<h1>id id</h1>}
+            path='anime/:slug'
+            element={<DetailAnimeComponent />}
           />
 
           {/* Route yang masih ada di dalam profile */}
