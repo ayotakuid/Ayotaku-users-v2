@@ -19,6 +19,9 @@ export default {
           "ayotaku-dark": "#3b3d51",
           "ayotaku-super-dark": "#23242e",
         },
+        backgroundImage: {
+          "ayotaku-genres": "url('/src/image/banner-red.jpg')",
+        },
         textColor: {
           "ayotaku-text-default": "#d9d2ff",
         },
