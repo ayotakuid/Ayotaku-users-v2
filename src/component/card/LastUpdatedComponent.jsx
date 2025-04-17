@@ -9,6 +9,7 @@ import { Button } from "primereact/button";
 import { Tooltip } from "primereact/tooltip";
 import BoxFilterSeasonComponent from "../alert/BoxFilterSeasonComponent";
 import { classNames } from "primereact/utils";
+import { useProgressBar } from "../utils/ProgressBarProvider";
 
 function LastUpdatedComponent() {
   const [isDataLastUpdate, setIsDataLastUpdate] = useState(null);
@@ -18,6 +19,7 @@ function LastUpdatedComponent() {
   const [isFilterSeason, setIsFilterSeason] = useState([]);
   const [isFilterYear, setIsFilterYear] = useState([]);
 
+  const { loadingBarState } = useProgressBar();
   const navigate = useNavigate();
 
   const fetchLastUpdateAnime = async ({ year = null, season = null, limit = isLoadMoreCount } = {}) => {
@@ -124,8 +126,14 @@ function LastUpdatedComponent() {
         <div className="col-span-12">
           <div className="grid grid-cols-12 gap-4">
             { isDataLastUpdate?.map((item) => (
-              <div key={item.id} className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2 cursor-pointer group transition duration-500">
-                <div className="flex flex-col bg-ayotaku-super-dark rounded-lg shadow-sm overflow-hidden group min-h-[470px]">
+              <div 
+                key={item.id} 
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2 cursor-pointer group transition duration-500"
+              >
+                <div 
+                  className="flex flex-col bg-ayotaku-super-dark rounded-lg shadow-sm overflow-hidden group min-h-[470px]"
+                  onClick={() => loadingBarState(`/anime/${item.slug_anime}`)}
+                >
                   {/* Gambar */}
                   <div className="relative w-full h-60 sm:h-64 md:h-48 lg:h-64">
                     <img
@@ -184,8 +192,10 @@ function LastUpdatedComponent() {
                           <div
                             key={episode.id}
                             className="flex justify-between items-center hover:underline cursor-pointer"
-                            onClick={() =>
-                              navigate(`/anime/${item.slug_anime}/${episode.slug_eps}`)
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                loadingBarState(`/anime/${item.slug_anime}/${episode.slug_eps}`)
+                              }
                             }
                           >
                             <span className="truncate">{episode.episode}</span>

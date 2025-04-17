@@ -16,8 +16,10 @@ import 'swiper/css';
 import { PlayIcon } from '@heroicons/react/24/solid';
 import LastUpdatedComponent from './card/LastUpdatedComponent';
 import SuggestedForTodayComponent from './card/SuggestedForTodayComponent';
+import { useProgressBar } from './utils/ProgressBarProvider';
 
 function MainContentComponent() {
+  const { loadingBarState } = useProgressBar();
   const [isActiveSwiper, setIsActiveSwiper] = useState(0);
   const [isSwiper, setIsSwiper] = useState(null);
   const [isDataRecommend, setIsDataRecommend] = useState(null);
@@ -116,7 +118,7 @@ function MainContentComponent() {
                   >
                     <div 
                       className='w-full h-full object-cover rounded-2xl hover:cursor-pointer'
-                      onClick={() => navigate(`anime/${item.id}`)}
+                      onClick={() => loadingBarState(`anime/${item.id}`)}
                     >
                       <img
                         src={item.img}
