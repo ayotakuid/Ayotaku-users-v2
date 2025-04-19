@@ -104,23 +104,23 @@ function LastUpdatedComponent() {
               </form>
               
             </div>
-            <div className="mx-2">
+            <div className="mx-2 relative">
               <Tooltip target=".filter-button" content="Filter" className="text-ayotaku-text-sm px-0 py-1"/>
               <button
-                className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-lg shadow duration-300 hover:bg-ayotaku-dark filter-button my-1"
+                className="bg-ayotaku-super-dark text-white px-4 py-2 rounded-md shadow hover:bg-ayotaku-dark filter-button my-1 active:scale-75 transition-all duration-300"
                 data-pr-position="top"
                 onClick={() => setIsShowUpFilter(!isShowUpFilter)}
               >
                 <AdjustmentsHorizontalIcon className='h-5 w-5 flex-none dark:text-white'/>
               </button>
+              <BoxFilterSeasonComponent 
+                isShowUpFilter={isShowUpFilter}
+                setIsFilterSeason={setIsFilterSeason}
+                setIsFilterYear={setIsFilterYear}
+                setIsLoadMoreCount={setIsLoadMoreCount}
+              />
             </div>
           </div>
-            <BoxFilterSeasonComponent 
-              isShowUpFilter={isShowUpFilter}
-              setIsFilterSeason={setIsFilterSeason}
-              setIsFilterYear={setIsFilterYear}
-              setIsLoadMoreCount={setIsLoadMoreCount}
-            />
         </div>
 
         <div className="col-span-12">
