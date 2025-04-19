@@ -18,6 +18,7 @@ import './style/global.css';
 import 'primeicons/primeicons.css';
 import { BrowserRouter } from 'react-router-dom';
 import { SearchProvider } from './component/utils/SearchProvider.jsx';
+import { DialogProvider } from './component/utils/DialogContext.jsx';
         
 ReactDOM.createRoot(
   document.getElementById('root')
@@ -27,10 +28,12 @@ ReactDOM.createRoot(
       <PrimeReactProvider value={{ pt: Tailwind }}>
         <ProgressBarProvider>
           <SearchProvider>
-            <HelmetProvider>
-              <App />
-              <Toaster />
-            </HelmetProvider>
+            <DialogProvider>
+              <HelmetProvider>
+                <App />
+                <Toaster />
+              </HelmetProvider>
+            </DialogProvider>
           </SearchProvider>
         </ProgressBarProvider>
       </PrimeReactProvider>
