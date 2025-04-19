@@ -9,7 +9,7 @@ import { classNames } from "primereact/utils";
 import { Ripple } from "primereact/ripple";
 import { Tooltip } from "primereact/tooltip";
 import { MultiSelect } from "primereact/multiselect";
-import { Tailwind, TRANSITIONS } from '../utils/handler-theming-multiselect';
+import { Tailwind } from '../utils/handler-theming-multiselect';
 import { TailwindDropdown} from '../utils/handler-theming-dropdown';
 import { templatePaginator } from '../utils/handler-template-paginator';
 import { Dropdown } from "primereact/dropdown";
